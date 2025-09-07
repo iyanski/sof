@@ -33,3 +33,16 @@ export interface Carrier {
   deliveryTime: number;
   environmentalImpact: number
 }
+
+export interface OfferRequest {
+  shipment: Shipment;
+  carriers?: Carrier[];
+}
+
+export interface Offer {
+  carrierId: string;
+  carrierName: string;
+  price: number;
+  deliveryTime: number;
+  environmentalImpact: number;
+}
