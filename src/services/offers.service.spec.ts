@@ -4,7 +4,6 @@ import { Shipment } from '../types';
 
 describe('Offers Service', () => {
 	const mockShipment: Shipment = {
-		id: 'shipment-1',
 		originAddress: { country: 'US' },
 		destinationAddress: { country: 'CA' },
 		packages: [

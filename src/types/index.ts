@@ -12,9 +12,25 @@ export interface Package {
     height: number;
   }
 }
+export interface EligibilityRule {
+  weight?: {
+    min?: number;
+    max?: number;
+  };
+  volume?: {
+    min?: number;
+    max?: number;
+  };
+  dimensions?: {
+    maxLength?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+  };
+  originAddress?: Address;
+  destinationAddress?: Address;
+}
 
 export interface Shipment {
-  id: string;
   originAddress: Address;
   destinationAddress: Address;
   packages: Package[];
@@ -23,15 +39,9 @@ export interface Shipment {
 export interface Carrier {
   id: string;
   name: string;
-  maxWeight: number; // in kg
-  maxDimensions: {
-    length: number;
-    width: number;
-    height: number;
-  };
-  maxVolume?: number; // in cm3
   deliveryTime: number;
-  environmentalImpact: number
+  environmentalImpact: number;
+  eligibilityRules: EligibilityRule[];
 }
 
 export interface OfferRequest {
@@ -45,4 +55,11 @@ export interface Offer {
   price: number;
   deliveryTime: number;
   environmentalImpact: number;
+}
+
+export interface ScoringWeights {
+  eligibility?: number;
+  cost?: number;
+  time?: number;
+  environmentalImpact?: number;
 }
