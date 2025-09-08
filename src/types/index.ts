@@ -13,6 +13,7 @@ export interface Package {
   }
 }
 export interface EligibilityRule {
+  name?: string;
   weight?: {
     min?: number;
     max?: number;
@@ -42,11 +43,17 @@ export interface Carrier {
   deliveryTime: number;
   environmentalImpact: number;
   eligibilityRules: EligibilityRule[];
+  supportedCountries: string[];
 }
 
 export interface OfferRequest {
   shipment: Shipment;
   carriers?: Carrier[];
+}
+
+export interface OfferResponse {
+  offers: Offer[];
+  generatedAt: Date;
 }
 
 export interface Offer {
@@ -57,9 +64,10 @@ export interface Offer {
   environmentalImpact: number;
 }
 
-export interface ScoringWeights {
-  eligibility?: number;
-  cost?: number;
-  time?: number;
-  environmentalImpact?: number;
+export interface EligibilityResult {
+  isEligible: boolean;
+  score: number; // 0-100
+  primarySignal: number; // 0-100 (most important)
+  secondarySignal: number; // 0-100 (tie-breaker)
+  reasons: string[];
 }

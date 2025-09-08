@@ -4,454 +4,455 @@ import { carriers } from '../data/carriers';
 import { Shipment } from '../types';
 
 describe('Eligibility Service', () => {
-	it('should handle country support validation for origin and destination', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Use DHL carrier (supports Nordic/EU countries)
-		const dhlCarrier = carriers.find(c => c.id === 'dhl-001')!;
-		
-		// Create a carrier that doesn't support the destination country
-		const unsupportedCarrier = {
-			...dhlCarrier,
-			id: 'local-carrier',
-			name: 'LocalCarrier',
-			supportedCountries: ['SE'] // Only supports Sweden
-		};
-		
-		const shipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 5,
-					dimensions: { length: 30, width: 20, height: 15 }
-				}
-			]
-		};
-		
-		// Test supported carrier (DHL supports both SE and NO)
-		const supportedResult = eligibilityService.calculateEligibilityScore(dhlCarrier, shipment);
-		expect(supportedResult.isEligible).toBe(true);
-		expect(supportedResult.reasons).not.toContain('Destination country NO not supported');
-		
-		// Test unsupported carrier (only supports SE, not NO)
-		const unsupportedResult = eligibilityService.calculateEligibilityScore(unsupportedCarrier, shipment);
-		expect(unsupportedResult.isEligible).toBe(false);
-		expect(unsupportedResult.reasons).toContain('Destination country NO not supported');
-	});
+  it('should handle country support validation for origin and destination', () => {
+    const eligibilityService = new EligibilityService();
 
-	it('should handle weight constraint violations', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Use DSV carrier (max 100kg weight limit)
-		const dsvCarrier = carriers.find(c => c.id === 'dsv-001')!;
-		
-		// Shipment within weight limit
-		const lightShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'SE' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 50, // Within 100kg limit
-					dimensions: { length: 30, width: 20, height: 15 }
-				}
-			]
-		};
-		
-		// Shipment exceeding weight limit
-		const heavyShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'SE' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 150, // Exceeds 100kg limit
-					dimensions: { length: 30, width: 20, height: 15 }
-				}
-			]
-		};
-		
-		// Test within weight limit
-		const lightResult = eligibilityService.calculateEligibilityScore(dsvCarrier, lightShipment);
-		expect(lightResult.isEligible).toBe(true);
-		expect(lightResult.reasons).not.toContain('Total weight 50kg exceeds limit 100kg');
-		
-		// Test exceeding weight limit
-		const heavyResult = eligibilityService.calculateEligibilityScore(dsvCarrier, heavyShipment);
-		expect(heavyResult.isEligible).toBe(false);
-		expect(heavyResult.reasons).toContain('Total weight 150kg exceeds limit 100kg');
-	});
+    // Use DHL carrier (supports Nordic/EU countries)
+    const dhlCarrier = carriers.find(c => c.id === 'dhl-001')!;
 
-	it('should handle volume constraint violations', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Use DHL carrier (max 270 volume limit)
-		const dhlCarrier = carriers.find(c => c.id === 'dhl-001')!;
-		
-		// Shipment within volume limit (30*20*15 = 9000 cm³)
-		const smallShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 5,
-					dimensions: { length: 30, width: 20, height: 15 } // 9000 cm³
-				}
-			]
-		};
-		
-		// Shipment exceeding volume limit (100*100*100 = 1,000,000 cm³)
-		const largeShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 5,
-					dimensions: { length: 100, width: 100, height: 100 } // 1,000,000 cm³
-				}
-			]
-		};
-		
-		// Test within volume limit
-		const smallResult = eligibilityService.calculateEligibilityScore(dhlCarrier, smallShipment);
-		expect(smallResult.isEligible).toBe(true);
-		expect(smallResult.reasons).not.toContain('Total volume 9000 exceeds limit 270');
-		
-		// Test exceeding volume limit
-		const largeResult = eligibilityService.calculateEligibilityScore(dhlCarrier, largeShipment);
-		expect(largeResult.isEligible).toBe(false);
-		expect(largeResult.reasons).toContain('Total volume 1000000 exceeds limit 270');
-	});
+    // Create a carrier that doesn't support the destination country
+    const unsupportedCarrier = {
+      ...dhlCarrier,
+      id: 'local-carrier',
+      name: 'LocalCarrier',
+      supportedCountries: ['SE'] // Only supports Sweden
+    };
 
-	it('should handle eligibility rule evaluation', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Use Bring carrier (has weight min/max rules: 20-300kg)
-		const bringCarrier = carriers.find(c => c.id === 'bring-001')!;
-		
-		// Shipment that meets all rules (weight between 20-300kg)
-		const compliantShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 50, // Within 20-300kg range
-					dimensions: { length: 30, width: 20, height: 15 }
-				}
-			]
-		};
-		
-		// Shipment that violates weight minimum rule (< 20kg)
-		const underweightShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 10, // Below 20kg minimum
-					dimensions: { length: 30, width: 20, height: 15 }
-				}
-			]
-		};
-		
-		// Shipment that violates weight maximum rule (> 300kg)
-		const overweightShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 350, // Above 300kg maximum
-					dimensions: { length: 30, width: 20, height: 15 }
-				}
-			]
-		};
-		
-		// Test compliant shipment
-		const compliantResult = eligibilityService.calculateEligibilityScore(bringCarrier, compliantShipment);
-		expect(compliantResult.isEligible).toBe(true);
-		expect(compliantResult.reasons).not.toContain('Rule violation:');
-		
-		// Test underweight shipment
-		const underweightResult = eligibilityService.calculateEligibilityScore(bringCarrier, underweightShipment);
-		expect(underweightResult.isEligible).toBe(false);
-		expect(underweightResult.reasons).toContain('Rule violation:');
-		
-		// Test overweight shipment
-		const overweightResult = eligibilityService.calculateEligibilityScore(bringCarrier, overweightShipment);
-		expect(overweightResult.isEligible).toBe(false);
-		expect(overweightResult.reasons).toContain('Rule violation:');
-	});
+    const shipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 5,
+          dimensions: { length: 5, width: 5, height: 5 } // 125 cm³, within DHL's 270 limit
+        }
+      ]
+    };
 
-	it('should enforce eligibility threshold of 70 points', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Create a carrier with no constraints to get high scores
-		const highScoreCarrier = {
-			id: 'high-score-carrier',
-			name: 'HighScoreCarrier',
-			deliveryTime: 1,
-			environmentalImpact: 1,
-			eligibilityRules: [], // No constraints
-			supportedCountries: ['SE', 'NO', 'DK', 'FI', 'DE', 'AT', 'CH', 'PL']
-		};
-		
-		// Create a carrier with many constraints to get low scores
-		const lowScoreCarrier = {
-			id: 'low-score-carrier',
-			name: 'LowScoreCarrier',
-			deliveryTime: 10,
-			environmentalImpact: 10,
-			eligibilityRules: [
-				{
-					weight: { max: 1 }, // Very restrictive
-					volume: { max: 1 }, // Very restrictive
-					originAddress: { country: 'US' } // Wrong origin
-				}
-			],
-			supportedCountries: ['US'] // Wrong country
-		};
-		
-		const shipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 50,
-					dimensions: { length: 30, width: 20, height: 15 }
-				}
-			]
-		};
-		
-		// Test high score carrier (should be eligible)
-		const highScoreResult = eligibilityService.calculateEligibilityScore(highScoreCarrier, shipment);
-		expect(highScoreResult.score).toBeGreaterThanOrEqual(70);
-		expect(highScoreResult.isEligible).toBe(true);
-		
-		// Test low score carrier (should be ineligible)
-		const lowScoreResult = eligibilityService.calculateEligibilityScore(lowScoreCarrier, shipment);
-		expect(lowScoreResult.score).toBeLessThan(70);
-		expect(lowScoreResult.isEligible).toBe(false);
-	});
+    // Test supported carrier (DHL supports both SE and NO)
+    const supportedResult = eligibilityService.calculateEligibilityScore(dhlCarrier, shipment);
+    expect(supportedResult.isEligible).toBe(true);
+    expect(supportedResult.reasons).not.toContain('Destination country NO not supported');
 
-	it('should handle edge cases gracefully', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Carrier with no eligibility rules
-		const noRulesCarrier = {
-			id: 'no-rules-carrier',
-			name: 'NoRulesCarrier',
-			deliveryTime: 3,
-			environmentalImpact: 5,
-			eligibilityRules: [], // No rules at all
-			supportedCountries: ['SE', 'NO']
-		};
-		
-		// Carrier with partial dimension constraints
-		const partialConstraintsCarrier = {
-			id: 'partial-constraints-carrier',
-			name: 'PartialConstraintsCarrier',
-			deliveryTime: 2,
-			environmentalImpact: 3,
-			eligibilityRules: [
-				{
-					dimensions: { maxLength: 100 } // Only length, missing width/height
-				}
-			],
-			supportedCountries: ['SE', 'NO']
-		};
-		
-		// Very small shipment (edge case)
-		const smallShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 0.1, // Very small weight
-					dimensions: { length: 1, width: 1, height: 1 } // Very small volume
-				}
-			]
-		};
-		
-		// Normal shipment
-		const normalShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 10,
-					dimensions: { length: 20, width: 15, height: 10 }
-				}
-			]
-		};
-		
-		// Test carrier with no rules
-		const noRulesResult = eligibilityService.calculateEligibilityScore(noRulesCarrier, normalShipment);
-		expect(noRulesResult).toBeDefined();
-		expect(noRulesResult.isEligible).toBe(true); // Should default to eligible
-		expect(noRulesResult.reasons).toEqual([]); // No reasons for violations
-		
-		// Test carrier with partial constraints
-		const partialResult = eligibilityService.calculateEligibilityScore(partialConstraintsCarrier, normalShipment);
-		expect(partialResult).toBeDefined();
-		expect(typeof partialResult.isEligible).toBe('boolean');
-		expect(Array.isArray(partialResult.reasons)).toBe(true);
-		
-		// Test very small shipment
-		const smallResult = eligibilityService.calculateEligibilityScore(noRulesCarrier, smallShipment);
-		expect(smallResult).toBeDefined();
-		expect(typeof smallResult.isEligible).toBe('boolean');
-		expect(typeof smallResult.score).toBe('number');
-		expect(smallResult.score).toBeGreaterThanOrEqual(0);
-		expect(smallResult.score).toBeLessThanOrEqual(100);
-	});
+    // Test unsupported carrier (only supports SE, not NO)
+    const unsupportedResult = eligibilityService.calculateEligibilityScore(unsupportedCarrier, shipment);
+    expect(unsupportedResult.isEligible).toBe(false);
+    expect(unsupportedResult.reasons).toContain('Destination country NO not supported');
+  });
 
-	it('should generate comprehensive reasons for multiple constraint violations', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Create a carrier with multiple constraints that will be violated
-		const restrictiveCarrier = {
-			id: 'restrictive-carrier',
-			name: 'RestrictiveCarrier',
-			deliveryTime: 5,
-			environmentalImpact: 8,
-			eligibilityRules: [
-				{
-					weight: { max: 10 }, // Will be violated
-					volume: { max: 100 }, // Will be violated
-					originAddress: { country: 'US' } // Will be violated
-				}
-			],
-			supportedCountries: ['US'] // Will be violated (destination not supported)
-		};
-		
-		// Shipment that violates multiple constraints
-		const violatingShipment: Shipment = {
-			originAddress: { country: 'SE' }, // Violates origin rule
-			destinationAddress: { country: 'NO' }, // Not supported
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 50, // Exceeds 10kg limit
-					dimensions: { length: 50, width: 50, height: 50 } // 125,000 cm³ exceeds 100 limit
-				}
-			]
-		};
-		
-		// Shipment that meets all constraints
-		const compliantShipment: Shipment = {
-			originAddress: { country: 'US' }, // Matches origin rule
-			destinationAddress: { country: 'US' }, // Supported country
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 5, // Within 10kg limit
-					dimensions: { length: 10, width: 10, height: 10 } // 1,000 cm³ within 100 limit
-				}
-			]
-		};
-		
-		// Test multiple violations
-		const violatingResult = eligibilityService.calculateEligibilityScore(restrictiveCarrier, violatingShipment);
-		expect(violatingResult.isEligible).toBe(false);
-		expect(violatingResult.reasons.length).toBeGreaterThan(1);
-		expect(violatingResult.reasons).toContain('Destination country NO not supported');
-		expect(violatingResult.reasons).toContain('Total weight 50kg exceeds limit 10kg');
-		expect(violatingResult.reasons).toContain('Total volume 125000 exceeds limit 100');
-		expect(violatingResult.reasons).toContain('Rule violation:');
-		
-		// Test no violations
-		const compliantResult = eligibilityService.calculateEligibilityScore(restrictiveCarrier, compliantShipment);
-		expect(compliantResult.isEligible).toBe(true);
-		expect(compliantResult.reasons).toEqual([]); // No violation reasons
-	});
+  it('should handle weight constraint violations', () => {
+    const eligibilityService = new EligibilityService();
 
-	it('should calculate scoring signals correctly', () => {
-		const eligibilityService = new EligibilityService();
-		
-		// Create a carrier with known constraints for predictable scoring
-		const testCarrier = {
-			id: 'test-carrier',
-			name: 'TestCarrier',
-			deliveryTime: 3,
-			environmentalImpact: 5,
-			eligibilityRules: [
-				{
-					weight: { max: 100 }, // 100kg limit
-					volume: { max: 100000 } // 100,000 cm³ limit
-				}
-			],
-			supportedCountries: ['SE', 'NO']
-		};
-		
-		// Shipment with optimal characteristics for high scoring
-		const optimalShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'NO' },
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 50, // 50% of weight limit (optimal)
-					dimensions: { length: 50, width: 40, height: 30 } // 60,000 cm³ (60% of volume limit)
-				}
-			]
-		};
-		
-		// Shipment with poor characteristics for low scoring
-		const poorShipment: Shipment = {
-			originAddress: { country: 'SE' },
-			destinationAddress: { country: 'US' }, // Not supported
-			packages: [
-				{
-					id: 'pkg-1',
-					quantity: 1,
-					weight: 90, // 90% of weight limit (high utilization)
-					dimensions: { length: 80, width: 80, height: 80 } // 512,000 cm³ (exceeds volume limit)
-				}
-			]
-		};
-		
-		// Test optimal shipment scoring
-		const optimalResult = eligibilityService.calculateEligibilityScore(testCarrier, optimalShipment);
-		expect(optimalResult.primarySignal).toBeGreaterThan(70); // Should be high due to country support
-		expect(optimalResult.secondarySignal).toBeGreaterThan(50); // Should be good due to optimal utilization
-		expect(optimalResult.score).toBeGreaterThan(70); // Overall should be eligible
-		expect(optimalResult.isEligible).toBe(true);
-		
-		// Test poor shipment scoring
-		const poorResult = eligibilityService.calculateEligibilityScore(testCarrier, poorShipment);
-		expect(poorResult.primarySignal).toBeLessThan(70); // Should be low due to unsupported country
-		expect(poorResult.secondarySignal).toBeLessThan(50); // Should be poor due to over-utilization
-		expect(poorResult.score).toBeLessThan(70); // Overall should be ineligible
-		expect(poorResult.isEligible).toBe(false);
-		
-		// Verify score calculation formula: (primary * 0.7) + (secondary * 0.3)
-		const expectedOptimalScore = Math.round((optimalResult.primarySignal * 0.7) + (optimalResult.secondarySignal * 0.3));
-		expect(optimalResult.score).toBe(expectedOptimalScore);
-		
-		const expectedPoorScore = Math.round((poorResult.primarySignal * 0.7) + (poorResult.secondarySignal * 0.3));
-		expect(poorResult.score).toBe(expectedPoorScore);
-	});
+    // Use DSV carrier (max 100kg weight limit)
+    const dsvCarrier = carriers.find(c => c.id === 'dsv-001')!;
+
+    // Shipment within weight limit
+    const lightShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'SE' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 50, // Within 100kg limit
+          dimensions: { length: 10, width: 10, height: 10 } // 1000 cm³, within 2000 limit
+        }
+      ]
+    };
+
+    // Shipment exceeding weight limit
+    const heavyShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'SE' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 150, // Exceeds 100kg limit
+          dimensions: { length: 10, width: 10, height: 10 } // 1000 cm³, within 2000 limit
+        }
+      ]
+    };
+
+    // Test within weight limit
+    const lightResult = eligibilityService.calculateEligibilityScore(dsvCarrier, lightShipment);
+    expect(lightResult.isEligible).toBe(true);
+    expect(lightResult.reasons).not.toContain('Total weight 50kg exceeds limit 100kg');
+
+    // Test exceeding weight limit
+    const heavyResult = eligibilityService.calculateEligibilityScore(dsvCarrier, heavyShipment);
+    expect(heavyResult.isEligible).toBe(false);
+    expect(heavyResult.reasons).toContain('Total weight 150kg exceeds limit 100kg');
+  });
+
+  it('should handle volume constraint violations', () => {
+    const eligibilityService = new EligibilityService();
+
+    // Use DHL carrier (max 270 volume limit)
+    const dhlCarrier = carriers.find(c => c.id === 'dhl-001')!;
+
+    // Shipment within volume limit (5*5*5 = 125 cm³)
+    const smallShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 5,
+          dimensions: { length: 5, width: 5, height: 5 } // 125 cm³
+        }
+      ]
+    };
+
+    // Shipment exceeding volume limit (100*100*100 = 1,000,000 cm³)
+    const largeShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 5,
+          dimensions: { length: 100, width: 100, height: 100 } // 1,000,000 cm³
+        }
+      ]
+    };
+
+    // Test within volume limit
+    const smallResult = eligibilityService.calculateEligibilityScore(dhlCarrier, smallShipment);
+    expect(smallResult.isEligible).toBe(true);
+    expect(smallResult.reasons).not.toContain('Total volume 125 exceeds limit 270');
+
+    // Test exceeding volume limit
+    const largeResult = eligibilityService.calculateEligibilityScore(dhlCarrier, largeShipment);
+    expect(largeResult.isEligible).toBe(false);
+    expect(largeResult.reasons).toContain('Rule violation: Maximum volume rule');
+  });
+
+  it('should handle eligibility rule evaluation', () => {
+    const eligibilityService = new EligibilityService();
+
+    // Use Bring carrier (has weight min/max rules: 20-300kg)
+    const bringCarrier = carriers.find(c => c.id === 'bring-001')!;
+
+    // Shipment that meets all rules (weight between 20-300kg)
+    const compliantShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 50, // Within 20-300kg range
+          dimensions: { length: 10, width: 10, height: 10 } // Small dimensions to avoid volume issues
+        }
+      ]
+    };
+
+    // Shipment that violates weight minimum rule (< 20kg)
+    const underweightShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 10, // Below 20kg minimum
+          dimensions: { length: 10, width: 10, height: 10 } // Small dimensions to avoid volume issues
+        }
+      ]
+    };
+
+    // Shipment that violates weight maximum rule (> 300kg)
+    const overweightShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 350, // Above 300kg maximum
+          dimensions: { length: 10, width: 10, height: 10 } // Small dimensions to avoid volume issues
+        }
+      ]
+    };
+
+    // Test compliant shipment
+    const compliantResult = eligibilityService.calculateEligibilityScore(bringCarrier, compliantShipment);
+    expect(compliantResult.isEligible).toBe(true);
+    expect(compliantResult.reasons).not.toContain('Rule violation:');
+
+    // Test underweight shipment
+    const underweightResult = eligibilityService.calculateEligibilityScore(bringCarrier, underweightShipment);
+    expect(underweightResult.isEligible).toBe(false);
+    expect(underweightResult.reasons).toContain('Rule violation: Weight rule');
+
+    // Test overweight shipment
+    const overweightResult = eligibilityService.calculateEligibilityScore(bringCarrier, overweightShipment);
+    expect(overweightResult.isEligible).toBe(false);
+    expect(overweightResult.reasons).toContain('Rule violation: Weight rule');
+  });
+
+  it('should enforce eligibility threshold of 70 points', () => {
+    const eligibilityService = new EligibilityService();
+
+    // Create a carrier with no constraints to get high scores
+    const highScoreCarrier = {
+      id: 'high-score-carrier',
+      name: 'HighScoreCarrier',
+      deliveryTime: 1,
+      environmentalImpact: 1,
+      eligibilityRules: [], // No constraints
+      supportedCountries: ['SE', 'NO', 'DK', 'FI', 'DE', 'AT', 'CH', 'PL']
+    };
+
+    // Create a carrier with many constraints to get low scores
+    const lowScoreCarrier = {
+      id: 'low-score-carrier',
+      name: 'LowScoreCarrier',
+      deliveryTime: 10,
+      environmentalImpact: 10,
+      eligibilityRules: [
+        {
+          weight: { max: 1 }, // Very restrictive
+          volume: { max: 1 }, // Very restrictive
+          originAddress: { country: 'US' } // Wrong origin
+        }
+      ],
+      supportedCountries: ['US'] // Wrong country
+    };
+
+    const shipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 50,
+          dimensions: { length: 30, width: 20, height: 15 }
+        }
+      ]
+    };
+
+    // Test high score carrier (should be eligible)
+    const highScoreResult = eligibilityService.calculateEligibilityScore(highScoreCarrier, shipment);
+    expect(highScoreResult.score).toBeGreaterThanOrEqual(70);
+    expect(highScoreResult.isEligible).toBe(true);
+
+    // Test low score carrier (should be ineligible)
+    const lowScoreResult = eligibilityService.calculateEligibilityScore(lowScoreCarrier, shipment);
+    expect(lowScoreResult.score).toBeLessThan(70);
+    expect(lowScoreResult.isEligible).toBe(false);
+  });
+
+  it('should handle edge cases gracefully', () => {
+    const eligibilityService = new EligibilityService();
+
+    // Carrier with no eligibility rules
+    const noRulesCarrier = {
+      id: 'no-rules-carrier',
+      name: 'NoRulesCarrier',
+      deliveryTime: 3,
+      environmentalImpact: 5,
+      eligibilityRules: [], // No rules at all
+      supportedCountries: ['SE', 'NO']
+    };
+
+    // Carrier with partial dimension constraints
+    const partialConstraintsCarrier = {
+      id: 'partial-constraints-carrier',
+      name: 'PartialConstraintsCarrier',
+      deliveryTime: 2,
+      environmentalImpact: 3,
+      eligibilityRules: [
+        {
+          dimensions: { maxLength: 100 } // Only length, missing width/height
+        }
+      ],
+      supportedCountries: ['SE', 'NO']
+    };
+
+    // Very small shipment (edge case)
+    const smallShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 0.1, // Very small weight
+          dimensions: { length: 1, width: 1, height: 1 } // Very small volume
+        }
+      ]
+    };
+
+    // Normal shipment
+    const normalShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 10,
+          dimensions: { length: 20, width: 15, height: 10 }
+        }
+      ]
+    };
+
+    // Test carrier with no rules
+    const noRulesResult = eligibilityService.calculateEligibilityScore(noRulesCarrier, normalShipment);
+    expect(noRulesResult).toBeDefined();
+    expect(noRulesResult.isEligible).toBe(true); // Should default to eligible
+    expect(noRulesResult.reasons).toEqual([]); // No reasons for violations
+
+    // Test carrier with partial constraints
+    const partialResult = eligibilityService.calculateEligibilityScore(partialConstraintsCarrier, normalShipment);
+    expect(partialResult).toBeDefined();
+    expect(typeof partialResult.isEligible).toBe('boolean');
+    expect(Array.isArray(partialResult.reasons)).toBe(true);
+
+    // Test very small shipment
+    const smallResult = eligibilityService.calculateEligibilityScore(noRulesCarrier, smallShipment);
+    expect(smallResult).toBeDefined();
+    expect(typeof smallResult.isEligible).toBe('boolean');
+    expect(typeof smallResult.score).toBe('number');
+    expect(smallResult.score).toBeGreaterThanOrEqual(0);
+    expect(smallResult.score).toBeLessThanOrEqual(100);
+  });
+
+  it('should generate comprehensive reasons for multiple constraint violations', () => {
+    const eligibilityService = new EligibilityService();
+
+    // Create a carrier with multiple constraints that will be violated
+    const restrictiveCarrier = {
+      id: 'restrictive-carrier',
+      name: 'RestrictiveCarrier',
+      deliveryTime: 5,
+      environmentalImpact: 8,
+      eligibilityRules: [
+        {
+          name: 'Restrictive rule',
+          weight: { max: 10 }, // Will be violated
+          volume: { max: 100 }, // Will be violated
+          originAddress: { country: 'US' } // Will be violated
+        }
+      ],
+      supportedCountries: ['US'] // Will be violated (destination not supported)
+    };
+
+    // Shipment that violates multiple constraints
+    const violatingShipment: Shipment = {
+      originAddress: { country: 'SE' }, // Violates origin rule
+      destinationAddress: { country: 'NO' }, // Not supported
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 50, // Exceeds 10kg limit
+          dimensions: { length: 50, width: 50, height: 50 } // 125,000 cm³ exceeds 100 limit
+        }
+      ]
+    };
+
+    // Shipment that meets all constraints
+    const compliantShipment: Shipment = {
+      originAddress: { country: 'US' }, // Matches origin rule
+      destinationAddress: { country: 'US' }, // Supported country
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 5, // Within 10kg limit
+          dimensions: { length: 4, width: 4, height: 4 } // 64 cm³ within 100 limit
+        }
+      ]
+    };
+
+    // Test multiple violations
+    const violatingResult = eligibilityService.calculateEligibilityScore(restrictiveCarrier, violatingShipment);
+    expect(violatingResult.isEligible).toBe(false);
+    expect(violatingResult.reasons.length).toBeGreaterThan(1);
+    expect(violatingResult.reasons).toContain('Destination country NO not supported');
+    expect(violatingResult.reasons).toContain('Total weight 50kg exceeds limit 10kg');
+    expect(violatingResult.reasons).toContain('Total volume 125000 exceeds limit 100');
+    expect(violatingResult.reasons).toContain('Rule violation: Restrictive rule');
+
+    // Test no violations
+    const compliantResult = eligibilityService.calculateEligibilityScore(restrictiveCarrier, compliantShipment);
+    expect(compliantResult.isEligible).toBe(true);
+    expect(compliantResult.reasons).toEqual([]); // No violation reasons
+  });
+
+  it('should calculate scoring signals correctly', () => {
+    const eligibilityService = new EligibilityService();
+
+    // Create a carrier with known constraints for predictable scoring
+    const testCarrier = {
+      id: 'test-carrier',
+      name: 'TestCarrier',
+      deliveryTime: 3,
+      environmentalImpact: 5,
+      eligibilityRules: [
+        {
+          weight: { max: 100 }, // 100kg limit
+          volume: { max: 100000 } // 100,000 cm³ limit
+        }
+      ],
+      supportedCountries: ['SE', 'NO']
+    };
+
+    // Shipment with optimal characteristics for high scoring
+    const optimalShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'NO' },
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 50, // 50% of weight limit (optimal)
+          dimensions: { length: 50, width: 40, height: 30 } // 60,000 cm³ (60% of volume limit)
+        }
+      ]
+    };
+
+    // Shipment with poor characteristics for low scoring
+    const poorShipment: Shipment = {
+      originAddress: { country: 'SE' },
+      destinationAddress: { country: 'US' }, // Not supported
+      packages: [
+        {
+          id: 'pkg-1',
+          quantity: 1,
+          weight: 90, // 90% of weight limit (high utilization)
+          dimensions: { length: 80, width: 80, height: 80 } // 512,000 cm³ (exceeds volume limit)
+        }
+      ]
+    };
+
+    // Test optimal shipment scoring
+    const optimalResult = eligibilityService.calculateEligibilityScore(testCarrier, optimalShipment);
+    expect(optimalResult.primarySignal).toBeGreaterThan(70); // Should be high due to country support
+    expect(optimalResult.secondarySignal).toBeGreaterThan(50); // Should be good due to optimal utilization
+    expect(optimalResult.score).toBeGreaterThan(70); // Overall should be eligible
+    expect(optimalResult.isEligible).toBe(true);
+
+    // Test poor shipment scoring
+    const poorResult = eligibilityService.calculateEligibilityScore(testCarrier, poorShipment);
+    expect(poorResult.primarySignal).toBeLessThan(70); // Should be low due to unsupported country
+    expect(poorResult.secondarySignal).toBeLessThanOrEqual(50); // Should be poor due to over-utilization
+    expect(poorResult.score).toBeLessThan(70); // Overall should be ineligible
+    expect(poorResult.isEligible).toBe(false);
+
+    // Verify score calculation formula: (primary * 0.7) + (secondary * 0.3)
+    const expectedOptimalScore = Math.round((optimalResult.primarySignal * 0.7) + (optimalResult.secondarySignal * 0.3));
+    expect(optimalResult.score).toBe(expectedOptimalScore);
+
+    const expectedPoorScore = Math.round((poorResult.primarySignal * 0.7) + (poorResult.secondarySignal * 0.3));
+    expect(poorResult.score).toBe(expectedPoorScore);
+  });
 });
