@@ -62,9 +62,9 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                 aria-required="true"
                 aria-describedby="origin-country-help"
               />
-              <div id="origin-country-help" style={{ fontSize: '0.875rem', color: '#6B7280', marginTop: '0.25rem' }}>
+              <Form.HelpText id="origin-country-help">
                 Select the country where your shipment originates
-              </div>
+              </Form.HelpText>
             </Form.Group>
 
             <Form.Group controlId="destinationCountry">
@@ -79,9 +79,9 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                 aria-required="true"
                 aria-describedby="destination-country-help"
               />
-              <div id="destination-country-help" style={{ fontSize: '0.875rem', color: '#6B7280', marginTop: '0.25rem' }}>
+              <Form.HelpText id="destination-country-help">
                 Select the country where your shipment will be delivered
-              </div>
+              </Form.HelpText>
             </Form.Group>
           </div>
         </fieldset>
@@ -117,9 +117,9 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                   aria-label="Weight unit"
                 />
               </div>
-              <div id="weight-help" style={{ fontSize: '0.875rem', color: '#6B7280', marginTop: '0.25rem' }}>
+              <Form.HelpText id="weight-help">
                 Enter the total weight of your package
-              </div>
+              </Form.HelpText>
             </Form.Group>
 
             <Form.Group controlId="quantity">
@@ -134,9 +134,9 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                 aria-required="true"
                 aria-describedby="quantity-help"
               />
-              <div id="quantity-help" style={{ fontSize: '0.875rem', color: '#6B7280', marginTop: '0.25rem' }}>
+              <Form.HelpText id="quantity-help">
                 Number of packages to ship
-              </div>
+              </Form.HelpText>
             </Form.Group>
           </div>
         </fieldset>
@@ -190,17 +190,11 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                 aria-label="Height"
               />
             </HStack>
-            <div style={{ fontSize: '0.875rem', color: '#6B7280', marginTop: '0.25rem' }}>
+            <Form.HelpText>
               Enter the length, width, and height of your package
-            </div>
+            </Form.HelpText>
           </Form.Group>
         </fieldset>
-
-        {/* Advanced Options */}
-        <AdvancedOptions
-          formData={formData}
-          disabled={isLoading}
-        />
 
         {/* Actions */}
         <div 
@@ -234,9 +228,9 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
             {isLoading ? 'Getting Offers...' : 'Get Offers'}
           </Button>
         </div>
-        <div id="submit-help" style={{ fontSize: '0.875rem', color: '#6B7280', marginTop: '0.5rem', textAlign: 'right' }}>
+        <Form.HelpText id="submit-help">
           Click to compare offers from multiple carriers
-        </div>
+        </Form.HelpText>
       </Form>
     </Panel>
   )
