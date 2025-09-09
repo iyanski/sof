@@ -12,6 +12,10 @@ import {
   isFormDataValid,
   generateCSRFToken,
   validateCSRFToken,
+  validateShipmentRequest,
+  validatePackage,
+  validateOfferResponse,
+  validateOffer,
 } from './security'
 
 describe('Security Utilities', () => {
@@ -209,6 +213,87 @@ describe('Security Utilities', () => {
       expect(validateCSRFToken(token, token)).toBe(true)
       expect(validateCSRFToken(token, 'different-token')).toBe(false)
       expect(validateCSRFToken('', '')).toBe(false)
+    })
+  })
+
+  describe('validatePackage', () => {
+    it('should accept valid package data', () => {
+      const validPackage = {
+        weight: 10,
+        quantity: 1,
+        dimensions: { length: 30, width: 20, height: 15 }
+      }
+      expect(validatePackage(validPackage)).toBe(true)
+    })
+
+    it('should reject invalid package data', () => {
+      expect(validatePackage(null)).toBe(false)
+      expect(validatePackage({})).toBe(false)
+      expect(validatePackage({ weight: 0 })).toBe(false)
+      expect(validatePackage({ weight: 10, quantity: 0 })).toBe(false)
+      expect(validatePackage({ weight: 10, quantity: 1 })).toBe(false) // missing dimensions
+    })
+  })
+
+  describe('validateShipmentRequest', () => {
+    it('should accept valid shipment request', () => {
+      const validRequest = {
+        shipment: {
+          packages: [{
+            weight: 10,
+            quantity: 1,
+            dimensions: { length: 30, width: 20, height: 15 }
+          }]
+        }
+      }
+      expect(validateShipmentRequest(validRequest)).toBe(true)
+    })
+
+    it('should reject invalid shipment request', () => {
+      expect(validateShipmentRequest(null)).toBe(false)
+      expect(validateShipmentRequest({})).toBe(false)
+      expect(validateShipmentRequest({ shipment: {} })).toBe(false)
+      expect(validateShipmentRequest({ shipment: { packages: [] } })).toBe(false)
+    })
+  })
+
+  describe('validateOffer', () => {
+    it('should accept valid offer data', () => {
+      const validOffer = {
+        carrierId: 'carrier-1',
+        carrierName: 'Test Carrier',
+        cost: 100.50,
+        deliveryTime: 3
+      }
+      expect(validateOffer(validOffer)).toBe(true)
+    })
+
+    it('should reject invalid offer data', () => {
+      expect(validateOffer(null)).toBe(false)
+      expect(validateOffer({})).toBe(false)
+      expect(validateOffer({ carrierId: 'carrier-1' })).toBe(false) // missing name
+      expect(validateOffer({ carrierId: 'carrier-1', carrierName: 'Test' })).toBe(false) // missing cost
+      expect(validateOffer({ carrierId: 'carrier-1', carrierName: 'Test', cost: -10 })).toBe(false) // negative cost
+    })
+  })
+
+  describe('validateOfferResponse', () => {
+    it('should accept valid offer response', () => {
+      const validResponse = [
+        {
+          carrierId: 'carrier-1',
+          carrierName: 'Test Carrier',
+          cost: 100.50
+        }
+      ]
+      expect(validateOfferResponse(validResponse)).toBe(true)
+    })
+
+    it('should reject invalid offer response', () => {
+      expect(validateOfferResponse(null)).toBe(false)
+      expect(validateOfferResponse({})).toBe(false)
+      expect(validateOfferResponse([])).toBe(true) // empty array is valid
+      expect(validateOfferResponse([{}])).toBe(false) // invalid offer
     })
   })
 })

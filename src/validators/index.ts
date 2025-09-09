@@ -38,5 +38,13 @@ export {
   urlRule
 } from './utils'
 
+// Security validation functions
+export {
+  validateShipmentRequest,
+  validatePackage,
+  validateOfferResponse,
+  validateOffer
+} from '../utils/security'
+
 // Legacy export for backward compatibility
 export { shipmentSchema as default } from './schemas'

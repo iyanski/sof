@@ -147,3 +147,104 @@ export const validateCSRFToken = (token: string, expectedToken: string): boolean
   if (!token || !expectedToken) return false
   return token === expectedToken
 }
+
+/**
+ * Validate shipment request structure
+ */
+export const validateShipmentRequest = (request: any): boolean => {
+  if (!request || !request.shipment) {
+    return false
+  }
+  
+  const { shipment } = request
+  
+  // Validate packages array
+  if (!shipment.packages || !Array.isArray(shipment.packages) || shipment.packages.length === 0) {
+    return false
+  }
+  
+  // Validate each package
+  for (const pkg of shipment.packages) {
+    if (!validatePackage(pkg)) {
+      return false
+    }
+  }
+  
+  return true
+}
+
+/**
+ * Validate individual package data
+ */
+export const validatePackage = (pkg: any): boolean => {
+  if (!pkg) return false
+  
+  // Validate weight
+  if (typeof pkg.weight !== 'number' || pkg.weight <= 0 || pkg.weight > VALIDATION_LIMITS.MAX_WEIGHT) {
+    return false
+  }
+  
+  // Validate quantity
+  if (typeof pkg.quantity !== 'number' || pkg.quantity <= 0 || pkg.quantity > VALIDATION_LIMITS.MAX_QUANTITY) {
+    return false
+  }
+  
+  // Validate dimensions
+  if (!pkg.dimensions || 
+      typeof pkg.dimensions.length !== 'number' || 
+      typeof pkg.dimensions.width !== 'number' || 
+      typeof pkg.dimensions.height !== 'number') {
+    return false
+  }
+  
+  // Validate dimension values
+  if (pkg.dimensions.length <= 0 || pkg.dimensions.length > VALIDATION_LIMITS.MAX_DIMENSION ||
+      pkg.dimensions.width <= 0 || pkg.dimensions.width > VALIDATION_LIMITS.MAX_DIMENSION ||
+      pkg.dimensions.height <= 0 || pkg.dimensions.height > VALIDATION_LIMITS.MAX_DIMENSION) {
+    return false
+  }
+  
+  return true
+}
+
+/**
+ * Validate offer response structure
+ */
+export const validateOfferResponse = (data: any): boolean => {
+  if (!Array.isArray(data)) {
+    return false
+  }
+  
+  // Validate each offer
+  for (const offer of data) {
+    if (!validateOffer(offer)) {
+      return false
+    }
+  }
+  
+  return true
+}
+
+/**
+ * Validate individual offer data
+ */
+export const validateOffer = (offer: any): boolean => {
+  if (!offer) return false
+  
+  // Required fields
+  if (!offer.carrierId || !offer.carrierName || typeof offer.cost !== 'number') {
+    return false
+  }
+  
+  // Validate cost is positive
+  if (offer.cost < 0) {
+    return false
+  }
+  
+  // Validate delivery time if present
+  if (offer.deliveryTime !== undefined && (typeof offer.deliveryTime !== 'number' || offer.deliveryTime < 0)) {
+    return false
+  }
+  
+  return true
+}
