@@ -6,13 +6,11 @@ import { Content, Heading } from 'rsuite'
 interface OffersListProps {
   offers: Offer[]
   onSelectOffer?: (offer: Offer) => void
-  onViewDetails?: (offer: Offer) => void
 }
 
 export const OffersList: React.FC<OffersListProps> = ({ 
   offers, 
   onSelectOffer,
-  onViewDetails 
 }) => {
   // Calculate which offers have special badges
   const getOfferBadges = (offers: Offer[]) => {
@@ -56,14 +54,6 @@ export const OffersList: React.FC<OffersListProps> = ({
     }
   }
 
-  const handleViewDetails = (offer: Offer) => {
-    if (onViewDetails) {
-      onViewDetails(offer)
-    } else {
-      console.log('View details for offer:', offer)
-    }
-  }
-
   return (
     <Content>
       <Heading level={4}>
@@ -77,7 +67,6 @@ export const OffersList: React.FC<OffersListProps> = ({
               key={offer.carrierId}
               offer={offer}
               onSelect={handleSelectOffer}
-              onDetails={handleViewDetails}
               isBestValue={offerBadges[offer.carrierId]?.isBestValue || false}
               isFastest={offerBadges[offer.carrierId]?.isFastest || false}
               isCheapest={offerBadges[offer.carrierId]?.isCheapest || false}

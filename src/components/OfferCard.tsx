@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, Tooltip, Whisper, Rate } from 'rsuite'
+import { Card, Button, Tooltip, Whisper, Rate, ButtonToolbar } from 'rsuite'
 import type { Offer } from './types'
 import { Badge } from './Badge'
 import { Pill } from './Pill'
@@ -7,7 +7,6 @@ import { Pill } from './Pill'
 interface OfferCardProps {
   offer: Offer
   onSelect: (offer: Offer) => void
-  onDetails: (offer: Offer) => void
   isBestValue?: boolean
   isFastest?: boolean
   isCheapest?: boolean
@@ -16,7 +15,6 @@ interface OfferCardProps {
 export const OfferCard: React.FC<OfferCardProps> = ({
   offer,
   onSelect,
-  onDetails,
   isBestValue = false,
   isFastest = false,
   isCheapest = false
@@ -226,29 +224,17 @@ export const OfferCard: React.FC<OfferCardProps> = ({
         )}
 
         {/* Action buttons */}
-        <div style={{ 
-          display: 'flex', 
-          gap: '12px',
-          justifyContent: 'flex-end'
-        }}>
-          <Button
-            appearance="ghost"
-            size="sm"
-            onClick={() => onDetails(offer)}
-            style={{ minHeight: '44px' }}
-          >
-            Details
-          </Button>
+        <ButtonToolbar style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             appearance="primary"
-            size="sm"
+            size="lg"
             onClick={() => onSelect(offer)}
             disabled={!offer.isEligible}
-            style={{ minHeight: '44px' }}
+            // style={{ minHeight: '44px' }}
           >
-            Select
+            Select Carrier
           </Button>
-        </div>
+        </ButtonToolbar>
       </Card.Body>
     </Card>
   )

@@ -72,6 +72,8 @@ export interface SubmissionModalProps {
   isSuccess: boolean
   onClose: () => void
   message: string
+  selectedOffer?: Offer | null
+  formData?: ShipmentFormData
 }
 
 export interface ApiError {

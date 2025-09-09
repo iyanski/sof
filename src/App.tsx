@@ -18,6 +18,7 @@ function App() {
     modalSuccess,
     modalMessage,
     offers,
+    selectedOffer,
     handleFormChange,
     handleSubmit,
     handleReset,
@@ -57,6 +58,8 @@ function App() {
         isOpen={modalOpen}
         isSuccess={modalSuccess}
         message={modalMessage}
+        selectedOffer={selectedOffer}
+        formData={formData}
         onClose={handleCloseModal}
       />
     </Container>

@@ -61,42 +61,9 @@ export const useShipmentForm = () => {
   const handleSelectOffer = (offer: Offer) => {
     setSelectedOffer(offer)
     
-    // Create detailed confirmation message
-    const formatPrice = (cost: number) => {
-      return new Intl.NumberFormat('sv-SE', {
-        style: 'currency',
-        currency: 'SEK',
-        minimumFractionDigits: 2
-      }).format(cost)
-    }
-
-    const formatDeliveryTime = (days: number) => {
-      if (days === 1) return '1 day'
-      return `${days} days`
-    }
-
-    const totalWeight = formData.weight * formData.quantity
-    const totalVolume = formData.length * formData.width * formData.height * formData.quantity // Volume in cm³
-
-    const confirmationMessage = `
-      Offer Selected Successfully!
-      
-      📦 Shipment Details:
-      • Route: ${formData.originCountry} → ${formData.destinationCountry}
-      • Weight: ${totalWeight} kg
-      • Volume: ${totalVolume.toLocaleString()} cm³
-      • Quantity: ${formData.quantity} package(s)
-      
-      🚚 Selected Carrier: ${offer.carrierName}
-      • Cost: ${formatPrice(offer.cost)}
-      • Delivery Time: ${formatDeliveryTime(offer.deliveryTime)}
-      • Eligibility Score: ${offer.eligibilityScore}/100
-      
-      Your shipment has been confirmed with ${offer.carrierName}.
-    `.trim()
-
+    // Simple success message since we're using cards for details
     setModalSuccess(true)
-    setModalMessage(confirmationMessage)
+    setModalMessage('Your shipment has been confirmed!')
     setModalOpen(true)
   }
 

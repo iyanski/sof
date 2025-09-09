@@ -166,7 +166,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
             appearance="subtle"
             onClick={onReset}
             disabled={isLoading}
-            style={{ minWidth: '100px' }}
+            size="md"
           >
             Reset
           </Button>
@@ -175,10 +175,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
             color="blue"
             onClick={onSubmit}
             loading={isLoading}
-            style={{ 
-              backgroundColor: '#2563EB',
-              minWidth: '140px'
-            }}
+            size="md"
           >
             {isLoading ? 'Getting Offers...' : 'Get Offers'}
           </Button>
