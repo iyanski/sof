@@ -1,0 +1,104 @@
+# APP Repository Commit History
+
+This file contains the complete commit history for the APP repository, extracted from the merged git history.
+
+## Commit History (Chronological Order)
+
+### 4c7765c - iyanski, 7 hours ago : Initial commit for app
+- Initial setup of the React/Vite application
+- Basic project structure with package.json, vite.config.ts
+- Initial App.tsx and main.tsx files
+- Set up TypeScript configuration
+
+### 94cffaf - iyanski, 5 hours ago : Add shipment form
+- Created shipment form component
+- Implemented form validation
+- Added form field components
+- Set up form state management
+
+### daed9d5 - iyanski, 3 hours ago : Show the shipment information and selected offer once an offer is selected
+- Added shipment information display
+- Implemented offer selection functionality
+- Created confirmation flow
+- Enhanced user experience
+
+### 75c61cd - iyanski, 3 hours ago : Integrate API and display available offers from shipment configuration
+- Integrated with API backend
+- Implemented offer fetching and display
+- Added API communication layer
+- Created offers list component
+
+### 7cc3b8a - iyanski, 3 hours ago : Enhance shipment confirmation modal
+- Enhanced confirmation modal
+- Improved modal functionality
+- Added better user feedback
+- Enhanced confirmation flow
+
+### 26e276f - iyanski, 2 hours ago : Use help text for form fields
+- Added help text to form fields
+- Improved form usability
+- Enhanced user guidance
+- Better form field documentation
+
+### 50ef9b8 - iyanski, 2 hours ago : Enhance validations
+- Enhanced form validation logic
+- Improved validation rules
+- Added better error handling
+- Enhanced user input validation
+
+### 6726428 - iyanski, 2 hours ago : Centralize validation logic
+- Centralized validation logic
+- Created reusable validation utilities
+- Improved code organization
+- Enhanced maintainability
+
+### 6efe227 - iyanski, 2 hours ago : Add tests
+- Added comprehensive test suite
+- Implemented component testing
+- Set up Jest and React Testing Library
+- Enhanced test coverage
+
+### 566ded5 - iyanski, 2 hours ago : Add accessibility issues and update tests
+- Improved accessibility features
+- Enhanced ARIA attributes
+- Updated test suite for accessibility
+- Better user experience for all users
+
+### 9654322 - iyanski, 67 minutes ago : Organize components
+- Reorganized component structure
+- Improved component organization
+- Better code structure
+- Enhanced maintainability
+
+### 68f0302 - iyanski, 59 minutes ago : Remove any types for stricter type compliance
+- Removed 'any' types for better TypeScript compliance
+- Enhanced type safety
+- Improved code quality
+- Better type definitions
+
+### b365e0b - iyanski, 51 minutes ago : Remove console.log and update the README.md file
+- Cleaned up console.log statements
+- Updated README documentation
+- Improved code cleanliness
+- Enhanced documentation
+
+## Summary
+
+Total APP Commits: 13
+Development Period: 7 hours
+Key Features Implemented:
+- React/Vite frontend application
+- Shipment form with validation
+- API integration
+- Offer display and selection
+- Confirmation modal
+- Comprehensive testing
+- Accessibility features
+- TypeScript implementation
+- Component organization
+- Form validation system
+
+## Note
+
+This history was extracted from the merged repository on September 9, 2025.
+All commit hashes and timestamps are preserved from the original APP repository.
