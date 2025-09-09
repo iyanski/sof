@@ -53,7 +53,7 @@ export class Logger {
  */
 export const createLogger = (context: string) => {
   const contextLogger = logger.child({ context });
-  
+
   return {
     debug: (message: string, meta?: object) => contextLogger.debug(meta, message),
     info: (message: string, meta?: object) => contextLogger.info(meta, message),

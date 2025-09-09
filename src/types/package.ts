@@ -1,5 +1,3 @@
-import { Address } from './address';
-
 export interface Package {
   id: string;
   quantity: number;
