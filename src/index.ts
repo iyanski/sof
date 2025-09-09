@@ -3,8 +3,12 @@ import express from 'express';
 import cors from 'cors';
 import { setupSwagger } from './config/swagger';
 import offersRouter from './routes/offers';
-import { globalErrorHandler, notFoundHandler, requestLogger } from './middleware/error.middleware';
+import {
+  globalErrorHandler,
+  notFoundHandler
+} from './middleware/error.middleware';
 import pinoHttp from 'pino-http';
+import { logger } from './utils/logger';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,10 +18,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(pinoHttp());
-
-// Request logging middleware
-app.use(requestLogger);
+// Use Pino HTTP logger with custom configuration
+app.use(pinoHttp({
+  logger,
+  customLogLevel: function (req, res, err) {
+    if (res.statusCode >= 400 && res.statusCode < 500) {
+      return 'warn';
+    } else if (res.statusCode >= 500 || err) {
+      return 'error';
+    }
+    return 'info';
+  },
+  customSuccessMessage: function (req, res) {
+    return `${req.method} ${req.url} - ${res.statusCode}`;
+  },
+  customErrorMessage: function (req, res, err) {
+    return `${req.method} ${req.url} - ${res.statusCode} - ${err.message}`;
+  }
+}));
 
 // Setup Swagger documentation
 setupSwagger(app);
@@ -53,12 +71,9 @@ app.use('*', notFoundHandler);
 app.use(globalErrorHandler);
 
 app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`🚀 SOF API server listening on port ${port}`);
-  // eslint-disable-next-line no-console
-  console.log(`📚 API Documentation available at http://localhost:${port}/api-docs`);
-  // eslint-disable-next-line no-console
-  console.log(`🔍 Health check available at http://localhost:${port}/health`);
+  logger.info(`🚀 SOF API server listening on port ${port}`);
+  logger.info(`📚 API Documentation available at http://localhost:${port}/api-docs`);
+  logger.info(`🔍 Health check available at http://localhost:${port}/health`);
 });
 
 export default app;

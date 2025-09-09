@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { ValidationError as ClassValidatorError } from 'class-validator';
 import { ErrorDto } from '../dto';
+import { createModuleLogger } from '../utils/logger';
+
+const logger = createModuleLogger('error-middleware');
 
 /**
  * Custom error class for application-specific errors
@@ -42,16 +45,14 @@ export const globalErrorHandler = (
   _next: NextFunction,
 ): void => {
   // Log error for debugging
-  // eslint-disable-next-line no-console
-  console.error('Error occurred:', {
+  logger.error({
     message: err.message,
     stack: err.stack,
     url: req.url,
     method: req.method,
-    timestamp: new Date().toISOString(),
     userAgent: req.get('User-Agent'),
     ip: req.ip || req.connection.remoteAddress,
-  });
+  }, 'Error occurred');
 
   // Handle different types of errors
   if (err instanceof AppValidationError) {
@@ -131,28 +132,4 @@ export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunctio
   return (req: Request, res: Response, next: NextFunction) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };
-};
-
-/**
- * Request logging middleware
- */
-export const requestLogger = (req: Request, res: Response, next: NextFunction): void => {
-  const start = Date.now();
-
-  // Log request
-  // eslint-disable-next-line no-console
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`, {
-    ip: req.ip || req.connection.remoteAddress,
-    userAgent: req.get('User-Agent'),
-    contentType: req.get('Content-Type'),
-  });
-
-  // Log response when finished
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    // eslint-disable-next-line no-console
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} - ${res.statusCode} (${duration}ms)`);
-  });
-
-  next();
 };

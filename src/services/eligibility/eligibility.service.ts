@@ -8,8 +8,10 @@ import { ScoringStrategyManager } from "./strategy-manager";
 import { EligibilityRuleEngine } from "./rule-engine";
 import { ScoringStrategy } from "./interfaces";
 import { CarrierConstraintExtractor } from "./utils/carrier-constraint-extractor";
+import { Logger } from "../../utils/logger";
 
 export class EligibilityService {
+  private readonly logger = new Logger(EligibilityService.name);
   private readonly strategyManager: ScoringStrategyManager;
   private readonly ruleEngine: EligibilityRuleEngine;
   private config: ComprehensiveScoringConfiguration; // Make config mutable for updates

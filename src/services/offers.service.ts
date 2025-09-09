@@ -7,8 +7,11 @@ import { Package } from "../types/package";
 import { Shipment } from "../types/shipment";
 import { EligibilityService } from "./eligibility.service";
 import { DEFAULT_STRATEGY_THRESHOLDS } from "./eligibility/config";
+import { Logger } from "../utils/logger";
 
 export class OffersService {
+  private readonly logger = new Logger(OffersService.name);
+
   constructor(
 		private readonly eligibilityService: EligibilityService
   ) {}
@@ -25,12 +28,13 @@ export class OffersService {
       const eligibilityResult = this.eligibilityService.calculateEligibilityScore(carrier, request.shipment, costRanges);
 
       // Debug logging
-      // console.log(`${carrier.name} eligibility details:`, {
-      //   isEligible: eligibilityResult.isEligible,
-      //   score: eligibilityResult.score,
-      //   reasons: eligibilityResult.reasons,
-      //   strategyScores: eligibilityResult.strategyScores
-      // });
+      this.logger.debug('Carrier eligibility details', {
+        carrier: carrier.name,
+        isEligible: eligibilityResult.isEligible,
+        score: eligibilityResult.score,
+        reasons: eligibilityResult.reasons,
+        strategyScores: eligibilityResult.strategyScores
+      });
 
       // Only include eligible carriers
       if (eligibilityResult.isEligible) {
