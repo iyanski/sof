@@ -6,6 +6,7 @@ export const carriers: Carrier[] = [
     name: 'DHL',
     deliveryTime: 3,
     environmentalImpact: 5,
+    costPerKg: 10, // New field: total weight * 10
     eligibilityRules: [
       {
         name: 'Maximum weight rule',
@@ -27,7 +28,8 @@ export const carriers: Carrier[] = [
     id: 'bring-001',
     name: 'Bring',
     deliveryTime: 2,
-    environmentalImpact: 5,
+    environmentalImpact: 7, // Updated to match your requirements
+    costPerKg: 15, // New field: total weight * 15
     eligibilityRules: [
       {
         name: 'Weight rule',
@@ -38,9 +40,10 @@ export const carriers: Carrier[] = [
   },
   {
     id: 'fedex-001',
-    name: 'FedEx',
+    name: 'FedEx Express',
     deliveryTime: 1,
     environmentalImpact: 10,
+    costPerKg: 33, // New field: total weight * 33
     eligibilityRules: [
       {
         name: 'Maximum weight rule',
@@ -54,9 +57,10 @@ export const carriers: Carrier[] = [
   },
   {
     id: 'dsv-001',
-    name: 'DSV',
+    name: 'DSV Green',
     deliveryTime: 5,
     environmentalImpact: 1,
+    costPerKg: 20, // New field: total weight * 20
     eligibilityRules: [
       {
         name: 'Maximum weight rule',

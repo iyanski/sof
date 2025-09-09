@@ -42,6 +42,7 @@ export interface Carrier {
   name: string;
   deliveryTime: number;
   environmentalImpact: number;
+  costPerKg: number; // New field for cost calculation
   eligibilityRules: EligibilityRule[];
   supportedCountries: string[];
 }
@@ -59,9 +60,13 @@ export interface OfferResponse {
 export interface Offer {
   carrierId: string;
   carrierName: string;
-  price: number;
+  cost: number; // Calculated: totalWeight * costPerKg
   deliveryTime: number;
-  environmentalImpact: number;
+  eligibilityScore: number; // From eligibility service
+  costEfficiencyScore: number; // New: cost efficiency score
+  serviceQualityScore: number; // New: service quality score
+  reasons: string[]; // Eligibility reasons
+  isEligible: boolean;
 }
 
 export interface EligibilityResult {
@@ -70,4 +75,14 @@ export interface EligibilityResult {
   primarySignal: number; // 0-100 (most important)
   secondarySignal: number; // 0-100 (tie-breaker)
   reasons: string[];
+  strategyScores: {
+    // Primary strategy scores
+    'delivery-speed': number;
+    'environmental-impact': number;
+    'cost-efficiency': number;
+    // Secondary strategy scores
+    'weight-efficiency': number;
+    'dimension-efficiency': number;
+    'capacity-utilization': number;
+  };
 }
