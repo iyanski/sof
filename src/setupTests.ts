@@ -26,7 +26,7 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-} as any
+} as unknown as typeof IntersectionObserver
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -34,7 +34,7 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-} as any
+} as unknown as typeof ResizeObserver
 
 // Mock scrollTo
 Object.defineProperty(window, 'scrollTo', {
@@ -45,7 +45,7 @@ Object.defineProperty(window, 'scrollTo', {
 // Suppress console warnings in tests
 const originalError = console.error
 beforeAll(() => {
-  console.error = (...args: any[]) => {
+  console.error = (...args: unknown[]) => {
     if (
       typeof args[0] === 'string' &&
       args[0].includes('Warning: ReactDOM.render is no longer supported')

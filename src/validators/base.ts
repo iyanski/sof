@@ -11,19 +11,8 @@ import {
  * These can be reused across different forms to maintain consistency
  */
 
-// Common string validation with length limits
-export const createStringSchema = (required = true, maxLength = VALIDATION_LIMITS.MAX_STRING_LENGTH) => {
-  let schema = Schema.Types.StringType()
-  
-  if (required) {
-    schema = schema.isRequired('This field is required')
-  }
-  
-  return schema.maxLength(maxLength, `Maximum length is ${maxLength} characters`)
-}
-
-// Common number validation with range
-export const createNumberSchema = (
+// Common number validation with range (used internally by other schemas)
+const createNumberSchema = (
   required = true, 
   min: number = VALIDATION_LIMITS.MIN_NUMBER, 
   max: number = VALIDATION_LIMITS.MAX_NUMBER,
@@ -44,21 +33,21 @@ export const createNumberSchema = (
 export const countrySchema = Schema.Types.StringType()
   .isRequired('Country is required')
   .addRule((value: string) => {
-    return ALLOWED_COUNTRIES.includes(value as any)
+    return ALLOWED_COUNTRIES.includes(value as typeof ALLOWED_COUNTRIES[number])
   }, 'Invalid country code')
 
 // Weight unit validation
 export const weightUnitSchema = Schema.Types.StringType()
   .isRequired('Weight unit is required')
   .addRule((value: string) => {
-    return ALLOWED_WEIGHT_UNITS.includes(value as any)
+    return ALLOWED_WEIGHT_UNITS.includes(value as typeof ALLOWED_WEIGHT_UNITS[number])
   }, 'Invalid weight unit')
 
 // Dimension unit validation
 export const dimensionUnitSchema = Schema.Types.StringType()
   .isRequired('Dimension unit is required')
   .addRule((value: string) => {
-    return ALLOWED_DIMENSION_UNITS.includes(value as any)
+    return ALLOWED_DIMENSION_UNITS.includes(value as typeof ALLOWED_DIMENSION_UNITS[number])
   }, 'Invalid dimension unit')
 
 // Weight validation (0.1 to MAX_WEIGHT)

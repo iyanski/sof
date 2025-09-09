@@ -8,8 +8,47 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, { ...options })
 
-// Re-export everything
-export * from '@testing-library/react'
+// Re-export specific testing utilities
+export {
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+  cleanup,
+  renderHook,
+  waitForElementToBeRemoved,
+  within,
+  getByRole,
+  getByText,
+  getByLabelText,
+  getByPlaceholderText,
+  getByTestId,
+  queryByRole,
+  queryByText,
+  queryByLabelText,
+  queryByPlaceholderText,
+  queryByTestId,
+  findByRole,
+  findByText,
+  findByLabelText,
+  findByPlaceholderText,
+  findByTestId,
+  getAllByRole,
+  getAllByText,
+  getAllByLabelText,
+  getAllByPlaceholderText,
+  getAllByTestId,
+  queryAllByRole,
+  queryAllByText,
+  queryAllByLabelText,
+  queryAllByPlaceholderText,
+  queryAllByTestId,
+  findAllByRole,
+  findAllByText,
+  findAllByLabelText,
+  findAllByPlaceholderText,
+  findAllByTestId
+} from '@testing-library/react'
 export { customRender as render }
 
 // Test data factories
@@ -78,7 +117,7 @@ export const waitForLoadingToFinish = () => {
   return new Promise(resolve => setTimeout(resolve, 0))
 }
 
-export const mockFetch = (response: any, status = 200) => {
+export const mockFetch = (response: unknown, status = 200) => {
   global.fetch = jest.fn().mockResolvedValue({
     ok: status >= 200 && status < 300,
     status,

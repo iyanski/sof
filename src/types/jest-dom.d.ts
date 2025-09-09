@@ -6,7 +6,7 @@ declare global {
   namespace jest {
     interface Matchers<R> {
       toBeInTheDocument(): R
-      toHaveStyle(style: Record<string, any>): R
+      toHaveStyle(style: Record<string, string | number>): R
       toBeDisabled(): R
       toHaveFocus(): R
       toBeEnabled(): R

@@ -1,5 +1,58 @@
 // Security utilities for input sanitization and validation
 
+// Type definitions for form data
+export interface ShipmentFormData {
+  originCountry: string
+  destinationCountry: string
+  weight: number
+  weightUnit: string
+  length: number
+  width: number
+  height: number
+  dimensionUnit: string
+  quantity: number
+}
+
+export interface SanitizedFormData {
+  originCountry: string | null
+  destinationCountry: string | null
+  weight: number | null
+  weightUnit: string | null
+  length: number | null
+  width: number | null
+  height: number | null
+  dimensionUnit: string | null
+  quantity: number | null
+}
+
+export interface ShipmentRequest {
+  shipment: {
+    packages: Package[]
+  }
+}
+
+export interface Package {
+  weight: number
+  quantity: number
+  dimensions: {
+    length: number
+    width: number
+    height: number
+  }
+}
+
+export interface Offer {
+  carrierId: string
+  carrierName: string
+  cost: number
+  deliveryTime?: number
+  eligibilityScore?: number
+  costEfficiencyScore?: number
+  serviceQualityScore?: number
+  reasons?: string[]
+  isEligible?: boolean
+}
+
 // Input validation constants
 export const VALIDATION_LIMITS = {
   MAX_STRING_LENGTH: 100,
@@ -109,7 +162,7 @@ export const validateQuantity = (quantity: number): number | null => {
 /**
  * Sanitize and validate form data
  */
-export const sanitizeFormData = (formData: any) => {
+export const sanitizeFormData = (formData: ShipmentFormData): SanitizedFormData => {
   return {
     originCountry: validateCountryCode(formData.originCountry),
     destinationCountry: validateCountryCode(formData.destinationCountry),
@@ -126,7 +179,7 @@ export const sanitizeFormData = (formData: any) => {
 /**
  * Check if form data is valid
  */
-export const isFormDataValid = (formData: any): boolean => {
+export const isFormDataValid = (formData: ShipmentFormData): boolean => {
   const sanitized = sanitizeFormData(formData)
   return Object.values(sanitized).every(value => value !== null)
 }
@@ -151,7 +204,7 @@ export const validateCSRFToken = (token: string, expectedToken: string): boolean
 /**
  * Validate shipment request structure
  */
-export const validateShipmentRequest = (request: any): boolean => {
+export const validateShipmentRequest = (request: ShipmentRequest): boolean => {
   if (!request || !request.shipment) {
     return false
   }
@@ -176,7 +229,7 @@ export const validateShipmentRequest = (request: any): boolean => {
 /**
  * Validate individual package data
  */
-export const validatePackage = (pkg: any): boolean => {
+export const validatePackage = (pkg: Package): boolean => {
   if (!pkg) return false
   
   // Validate weight
@@ -210,7 +263,7 @@ export const validatePackage = (pkg: any): boolean => {
 /**
  * Validate offer response structure
  */
-export const validateOfferResponse = (data: any): boolean => {
+export const validateOfferResponse = (data: Offer[]): boolean => {
   if (!Array.isArray(data)) {
     return false
   }
@@ -228,7 +281,7 @@ export const validateOfferResponse = (data: any): boolean => {
 /**
  * Validate individual offer data
  */
-export const validateOffer = (offer: any): boolean => {
+export const validateOffer = (offer: Offer): boolean => {
   if (!offer) return false
   
   // Required fields

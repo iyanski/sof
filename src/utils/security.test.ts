@@ -16,6 +16,9 @@ import {
   validatePackage,
   validateOfferResponse,
   validateOffer,
+  type Package,
+  type ShipmentRequest,
+  type Offer
 } from './security'
 
 describe('Security Utilities', () => {
@@ -33,9 +36,9 @@ describe('Security Utilities', () => {
     })
 
     it('should handle non-string input', () => {
-      expect(sanitizeString(null as any)).toBe('')
-      expect(sanitizeString(123 as any)).toBe('')
-      expect(sanitizeString(undefined as any)).toBe('')
+      expect(sanitizeString(null as unknown as string)).toBe('')
+      expect(sanitizeString(123 as unknown as string)).toBe('')
+      expect(sanitizeString(undefined as unknown as string)).toBe('')
     })
   })
 
@@ -227,11 +230,11 @@ describe('Security Utilities', () => {
     })
 
     it('should reject invalid package data', () => {
-      expect(validatePackage(null)).toBe(false)
-      expect(validatePackage({})).toBe(false)
-      expect(validatePackage({ weight: 0 })).toBe(false)
-      expect(validatePackage({ weight: 10, quantity: 0 })).toBe(false)
-      expect(validatePackage({ weight: 10, quantity: 1 })).toBe(false) // missing dimensions
+      expect(validatePackage(null as unknown as Package)).toBe(false)
+      expect(validatePackage({} as unknown as Package)).toBe(false)
+      expect(validatePackage({ weight: 0 } as unknown as Package)).toBe(false)
+      expect(validatePackage({ weight: 10, quantity: 0 } as unknown as Package)).toBe(false)
+      expect(validatePackage({ weight: 10, quantity: 1 } as unknown as Package)).toBe(false) // missing dimensions
     })
   })
 
@@ -250,10 +253,10 @@ describe('Security Utilities', () => {
     })
 
     it('should reject invalid shipment request', () => {
-      expect(validateShipmentRequest(null)).toBe(false)
-      expect(validateShipmentRequest({})).toBe(false)
-      expect(validateShipmentRequest({ shipment: {} })).toBe(false)
-      expect(validateShipmentRequest({ shipment: { packages: [] } })).toBe(false)
+      expect(validateShipmentRequest(null as unknown as ShipmentRequest)).toBe(false)
+      expect(validateShipmentRequest({} as unknown as ShipmentRequest)).toBe(false)
+      expect(validateShipmentRequest({ shipment: {} } as unknown as ShipmentRequest)).toBe(false)
+      expect(validateShipmentRequest({ shipment: { packages: [] } } as unknown as ShipmentRequest)).toBe(false)
     })
   })
 
@@ -269,11 +272,11 @@ describe('Security Utilities', () => {
     })
 
     it('should reject invalid offer data', () => {
-      expect(validateOffer(null)).toBe(false)
-      expect(validateOffer({})).toBe(false)
-      expect(validateOffer({ carrierId: 'carrier-1' })).toBe(false) // missing name
-      expect(validateOffer({ carrierId: 'carrier-1', carrierName: 'Test' })).toBe(false) // missing cost
-      expect(validateOffer({ carrierId: 'carrier-1', carrierName: 'Test', cost: -10 })).toBe(false) // negative cost
+      expect(validateOffer(null as unknown as Offer)).toBe(false)
+      expect(validateOffer({} as unknown as Offer)).toBe(false)
+      expect(validateOffer({ carrierId: 'carrier-1' } as unknown as Offer)).toBe(false) // missing name
+      expect(validateOffer({ carrierId: 'carrier-1', carrierName: 'Test' } as unknown as Offer)).toBe(false) // missing cost
+      expect(validateOffer({ carrierId: 'carrier-1', carrierName: 'Test', cost: -10 } as unknown as Offer)).toBe(false) // negative cost
     })
   })
 
@@ -290,10 +293,10 @@ describe('Security Utilities', () => {
     })
 
     it('should reject invalid offer response', () => {
-      expect(validateOfferResponse(null)).toBe(false)
-      expect(validateOfferResponse({})).toBe(false)
+      expect(validateOfferResponse(null as unknown as Offer[])).toBe(false)
+      expect(validateOfferResponse({} as unknown as Offer[])).toBe(false)
       expect(validateOfferResponse([])).toBe(true) // empty array is valid
-      expect(validateOfferResponse([{}])).toBe(false) // invalid offer
+      expect(validateOfferResponse([{} as unknown as Offer])).toBe(false) // invalid offer
     })
   })
 })
