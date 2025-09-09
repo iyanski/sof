@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber, IsObject, ValidateNested, Min, IsPositive } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsObject, ValidateNested, Min, IsPositive, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 
 /**
@@ -73,8 +73,9 @@ export class PackageDimensionsDto {
  */
 export class PackageDto {
   @IsString()
+  @IsOptional()
   @IsNotEmpty()
-    id: string;
+    id?: string;
 
   @IsNumber()
   @IsPositive()

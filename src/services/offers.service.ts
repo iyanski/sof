@@ -2,7 +2,6 @@ import { carriers } from "../data/carriers";
 import { Carrier } from "../types/carrier";
 import { Offer } from "../types/offer";
 import { OfferRequest } from "../types/offer-request";
-import { OfferResponse } from "../types/offer-response";
 import { Package } from "../types/package";
 import { Shipment } from "../types/shipment";
 import { EligibilityService } from "./eligibility.service";
@@ -16,7 +15,7 @@ export class OffersService {
 		private readonly eligibilityService: EligibilityService
   ) {}
 
-  async getOffers(request: OfferRequest): Promise<OfferResponse[]> {
+  async getOffers(request: OfferRequest): Promise<Offer[]> {
     const offers: Offer[] = [];
 
     const relevantCarriers = carriers;
@@ -69,10 +68,7 @@ export class OffersService {
       return b.eligibilityScore - a.eligibilityScore;
     });
 
-    return [{
-      offers,
-      generatedAt: new Date()
-    }]
+    return offers
   }
 
   private calculateTotalWeight(shipment: Shipment): number {

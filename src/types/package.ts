@@ -1,5 +1,5 @@
 export interface Package {
-  id: string;
+  id?: string;
   quantity: number;
   weight: number;
   dimensions: {

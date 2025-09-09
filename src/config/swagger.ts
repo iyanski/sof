@@ -43,7 +43,7 @@ const options: swaggerJsdoc.Options = {
                   schema: {
                     type: 'array',
                     items: {
-                      $ref: '#/components/schemas/OfferResponse'
+                      $ref: '#/components/schemas/Offer'
                     }
                   }
                 }

@@ -5,6 +5,5 @@ export { EligibilityRule } from './eligibility-rule';
 export { Shipment } from './shipment';
 export { Carrier } from './carrier';
 export { OfferRequest } from './offer-request';
-export { OfferResponse } from './offer-response';
 export { Offer } from './offer';
 export { EligibilityResult } from './eligibility-result';

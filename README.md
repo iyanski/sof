@@ -1,471 +1,272 @@
-# Shipment Offers & Logistics System (SOF)
+# SOF API - Shipment Offers & Logistics System
 
-**Ian Bert Tusil**
-
-A production-ready shipment and logistics offer system that evaluates carrier eligibility using a multi-tier scoring algorithm with configurable business rules, comprehensive explainability, and professional-grade API design.
+A comprehensive Express.js API for managing shipment offers and logistics operations. This API provides intelligent carrier selection, eligibility scoring, and cost optimization for shipping services.
 
 ## 🚀 Features
 
-- **Multi-tier Scoring Algorithm**: Primary (70%) and secondary (30%) scoring signals
-- **Comprehensive Validation**: DTO-based input validation with detailed error messages
-- **Interactive API Documentation**: Swagger UI with examples and schema definitions
-- **Global Error Handling**: Structured error responses with logging and monitoring
-- **Type-Safe Architecture**: Full TypeScript implementation with strict validation
-- **Comprehensive Testing**: 90%+ test coverage with 205 test cases
-- **Production-Ready**: Error handling, logging, health checks, and monitoring
-- **MongoDB Integration**: Detailed data modeling with performance optimizations
+- **Smart Carrier Selection**: Advanced eligibility scoring system with multiple strategies
+- **Cost Optimization**: Dynamic pricing calculation based on weight and carrier capabilities
+- **Comprehensive Validation**: Request validation using class-validator and DTOs
+- **API Documentation**: Interactive Swagger/OpenAPI documentation
+- **Structured Logging**: Pino-based logging with HTTP request tracking
+- **Error Handling**: Global error handling with detailed error responses
+- **Graceful Shutdown**: Proper server shutdown handling
+- **TypeScript**: Full TypeScript support with strict type checking
 
-## 🎯 Quick Start
+## 📋 Prerequisites
 
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
+- Node.js (v18 or higher)
+- npm or yarn package manager
 
-### Installation
+## 🛠️ Installation
+
+1. **Clone the repository and navigate to the API directory:**
+   ```bash
+   cd api
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   ```bash
+   cp env.example .env
+   ```
+   
+   Edit `.env` file with your configuration:
+   ```env
+   PORT=3000
+   NODE_ENV=development
+   ```
+
+## 🏃‍♂️ Running the Application
+
+### Development Mode
 ```bash
-cd api
-npm install
+npm run dev
+```
+
+### Production Mode
+```bash
 npm run build
 npm start
 ```
 
-### API Endpoints
-- **Health Check**: `GET /health`
-- **API Documentation**: `GET /api-docs` (Swagger UI)
-- **Offers**: `POST /api/offers`
-
-### Example Request
+### Testing
 ```bash
-curl -X POST http://localhost:3000/api/offers \
-  -H "Content-Type: application/json" \
-  -d '{
-    "shipment": {
-      "originAddress": {"country": "SE"},
-      "destinationAddress": {"country": "NO"},
-      "packages": [{
-        "id": "pkg_001",
-        "quantity": 1,
-        "weight": 5.5,
-        "dimensions": {"length": 30, "width": 20, "height": 15}
-      }]
-    }
-  }'
+npm test
 ```
 
-## 📊 Scoring Signals
-
-The scoring system uses two-tier signals: primary signals (delivery speed, environmental impact, cost efficiency) weighted at 70% for core business decisions, and secondary signals (weight efficiency, dimension efficiency, capacity utilization) weighted at 30% as tie-breakers, with both combined to determine overall eligibility against a configurable threshold.
+### Linting
+```bash
+npm run lint
+```
 
 ## 📚 API Documentation
 
-### Interactive Documentation
-The API includes comprehensive Swagger documentation accessible at `/api-docs` when the server is running. This provides:
-- Interactive API testing interface
-- Complete schema definitions
-- Request/response examples
-- Error response documentation
+Once the server is running, you can access:
 
-### Data Transfer Objects (DTOs)
-The API uses TypeScript DTOs for type-safe request/response handling:
+- **Interactive API Documentation**: `http://localhost:3000/api-docs`
+- **Health Check**: `http://localhost:3000/health`
+- **API Root**: `http://localhost:3000/`
 
-- **`AddressDto`**: Country validation (2-character codes)
-- **`PackageDto`**: Package information with dimensions and weight validation
-- **`ShipmentDto`**: Complete shipment structure with nested validation
-- **`OfferDto`**: Individual carrier offer details
-- **`OfferRequestDto`**: API request structure
-- **`OfferResponseDto`**: API response structure
-- **`ErrorDto`**: Standardized error responses
+## 🔗 API Endpoints
 
-### Validation
-All inputs are validated using `class-validator` decorators:
-- Required field validation
-- Type checking (string, number, boolean)
-- Range validation (min/max values)
-- Array validation (minimum items, nested validation)
-- Custom business rule validation
+### POST /api/offers
 
-### Error Handling
-The API implements comprehensive error handling:
-- **Global Error Handler**: Catches all unhandled errors
-- **Validation Errors**: Detailed field-level error messages
-- **Structured Responses**: Consistent error format across all endpoints
-- **Request Logging**: All requests and responses are logged
-- **404 Handling**: Proper handling of unknown routes
+Get shipping offers for a given shipment request.
 
-## 🏗️ Architecture & Design Choices
-
-### **Architecture & Scalability**
-- **Choice**: Strategy pattern with pluggable scoring algorithms
-- **Trade-off**: Increased complexity vs. flexibility to add new scoring criteria without modifying core logic
-
-### **Performance vs. Accuracy**
-- **Choice**: Pre-computed cost ranges and early hard constraint rejection
-- **Trade-off**: Slight accuracy loss in cost normalization vs. significant performance gains for high-volume requests
-
-### **Configuration Complexity**
-- **Choice**: Comprehensive configuration system with weight validation
-- **Trade-off**: More complex setup vs. business flexibility to adjust scoring without code changes
-
-### **Explainability Levels**
-- **Choice**: Three explainability modes (minimal, positive-only, full)
-- **Trade-off**: Code complexity vs. ability to control information disclosure based on user needs
-
-### **Hard vs. Soft Constraints**
-- **Choice**: Country support and weight/volume limits as hard constraints (immediate rejection)
-- **Trade-off**: Less nuanced scoring vs. clear business rule enforcement and performance optimization
-
-### **Scoring Granularity**
-- **Choice**: Two-tier system (primary 70%, secondary 30%) with individual strategy scores
-- **Trade-off**: More complex scoring logic vs. transparent, auditable decision-making
-
-### **Error Handling**
-- **Choice**: Global error handling middleware with structured responses and comprehensive logging
-- **Trade-off**: More defensive code vs. robust production reliability and excellent debugging capabilities
-
-### **API Design**
-- **Choice**: DTO-based validation with TypeScript decorators and Swagger documentation
-- **Trade-off**: Additional complexity vs. type safety, comprehensive validation, and excellent developer experience
-
-### **Testing Strategy**
-- **Choice**: Comprehensive test coverage including edge cases and configuration validation
-- **Trade-off**: Higher development time vs. confidence in business-critical logic
-
-## Assumptions about the Requirements
-
-### **Business Logic Assumptions**
-- **Cost is dynamic**: Cost ranges vary based on available carriers rather than fixed thresholds
-- **Environmental impact matters**: Customers value sustainability as a primary decision factor (29.3% weight)
-- **Cost efficiency is paramount**: Cost efficiency (35.7%) is the highest-weighted primary factor
-- **Tie-breaking is needed**: Secondary signals are necessary for carrier differentiation
-
-### **Data Quality Assumptions**
-- **Carrier data is reliable**: `costPerKg`, `deliveryTime`, and `environmentalImpact` are accurate
-- **Country codes are standardized**: Consistent country code format (SE, NO, DK, etc.)
-- **Weight/volume units are consistent**: kg for weight and cm³ for volume across all carriers
-
-### **User Behavior Assumptions**
-- **Transparency is valued**: Users want explanations for carrier selection decisions
-- **Threshold-based decisions**: 70-point threshold is meaningful for business users
-- **Multi-criteria evaluation**: Users consider multiple factors, not just cost or speed alone
-
-### **Technical Assumptions**
-- **Performance matters**: High-volume requests require optimized scoring algorithms
-- **Configuration flexibility**: Business rules will change frequently enough to warrant complex config system
-- **Rule complexity**: Carriers have diverse, complex eligibility rules requiring a rule engine
-
-### **Operational Assumptions**
-- **Real-time scoring**: Scoring must happen per-request rather than pre-computed
-- **Carrier availability**: All configured carriers are always available for evaluation
-- **Shipment validity**: Input shipments are properly formatted and within reasonable bounds
-
-### **Business Model Assumptions**
-- **Nordic/EU focus**: Primary market is Nordic countries with EU expansion
-- **B2B logistics**: Enterprise customers with complex shipping requirements
-- **Competitive pricing**: Cost efficiency is a key differentiator in the market
-
-## 🛠️ Development
-
-### **Project Structure**
-```
-api/
-├── src/
-│   ├── config/          # Swagger configuration
-│   ├── dto/             # Data Transfer Objects with validation
-│   ├── middleware/      # Error handling and request logging
-│   ├── routes/          # API route handlers
-│   ├── services/        # Business logic and scoring algorithms
-│   │   └── eligibility/ # Eligibility scoring system
-│   │       ├── strategies/    # Primary and secondary strategies
-│   │       ├── utils/         # Helper utilities
-│   │       └── config.ts      # Scoring configuration
-│   └── types/           # TypeScript type definitions
-├── dist/                # Compiled JavaScript
-├── coverage/            # Test coverage reports
-└── package.json
-```
-
-### **Available Scripts**
-```bash
-npm run build    # Compile TypeScript to JavaScript
-npm start        # Start production server
-npm run dev      # Start development server with hot reload
-npm test         # Run test suite (205 tests)
-npm run lint     # Run ESLint code quality checks
-```
-
-### **Testing**
-The project includes comprehensive testing with 90%+ coverage:
-- **Unit Tests**: Individual strategy and service testing
-- **Integration Tests**: End-to-end API testing
-- **Edge Cases**: Boundary condition testing
-- **Configuration Tests**: Validation and error handling
-
-### **Code Quality**
-- **TypeScript**: Strict type checking with decorators
-- **ESLint**: Code quality and style enforcement
-- **Prettier**: Code formatting
-- **Jest**: Testing framework with coverage reporting
-
-## 🚀 Future Development
-
-### **Immediate Enhancements (Next 1-3 months)**
-
-#### **Performance & Scalability**
-- **Caching Layer**: Implement Redis/memory cache for repeated carrier evaluations
-- **Batch Processing**: Add bulk shipment evaluation endpoints
-- **Database Integration**: Replace static carrier data with dynamic database queries
-- **API Rate Limiting**: Add request throttling and monitoring
-
-#### **Monitoring & Observability**
-- **Structured Logging**: Enhanced logging with correlation IDs
-- **Metrics Collection**: Implement Prometheus/Grafana dashboards for scoring performance
-- **Health Checks**: Enhanced service health endpoints and dependency monitoring
-- **Error Tracking**: Integrate Sentry or similar for production error monitoring
-
-### **Medium-term Features (3-6 months)**
-
-#### **Advanced Scoring**
-- **Machine Learning Integration**: Add ML models for dynamic weight adjustment
-- **Historical Performance**: Track carrier delivery accuracy and adjust scores accordingly
-- **Seasonal Adjustments**: Implement time-based scoring variations (holidays, weather)
-- **Customer Preferences**: Allow per-customer scoring weight customization
-
-#### **Enhanced Business Logic**
-- **Multi-modal Shipping**: Support for combined air/ground/sea transport
-- **Real-time Pricing**: Integrate with carrier APIs for live pricing updates
-- **Capacity Management**: Add carrier capacity tracking and availability
-- **Route Optimization**: Consider geographic routing in scoring
-
-#### **API Enhancements**
-- **Security and Authorization**: Add OAuth2/JWT authentication, role-based access control, and API key management
-- **GraphQL Support**: Add GraphQL endpoint for flexible data querying
-- **Webhook Integration**: Real-time notifications for eligibility changes
-- **API Versioning**: Implement proper API versioning strategy
-- **OpenAPI Documentation**: Auto-generated API documentation
-
-### **Long-term Vision (6-12 months)**
-
-#### **Platform Evolution**
-- **Microservices Architecture**: Split into carrier management, scoring, and offers services
-- **Event-Driven Architecture**: Implement event sourcing for audit trails
-- **Multi-tenant Support**: Add tenant isolation for different customers
-- **International Expansion**: Support for global carriers and regulations
-
-#### **Advanced Analytics**
-- **Predictive Analytics**: Forecast carrier performance and pricing trends
-- **A/B Testing Framework**: Test different scoring algorithms in production
-- **Business Intelligence**: Advanced reporting and analytics dashboards
-- **Cost Optimization**: AI-driven recommendations for shipping cost reduction
-
-#### **Integration Ecosystem**
-- **Carrier API Integrations**: Direct integration with major carrier APIs
-- **ERP System Connectors**: Pre-built integrations with SAP, Oracle, etc.
-- **Third-party Logistics**: Support for 3PL providers and freight forwarders
-- **Compliance Management**: Automated customs and regulatory compliance
-
-## MongoDB Data Modeling
-
-### **Offers Collection Schema**
-
-```javascript
+**Request Body:**
+```json
 {
-  _id: ObjectId("..."),
-  offerId: "offer_abc123", // Unique business identifier
-  shipmentId: "ship_12345", // Reference to shipment
-  
-  // Embedded Carrier Data (denormalized for performance)
-  carrier: {
-    carrierId: "dhl-001",
-    name: "DHL",
-    deliveryTime: 3,
-    environmentalImpact: 5,
-    costPerKg: 10,
-    supportedCountries: ["SE", "NO", "DK", "FI", "DE", "AT", "CH", "PL"]
-  },
-  
-  // Pricing & Cost Information
-  pricing: {
-    baseCost: 55.00, // totalWeight * costPerKg
-    costPerKg: 10.00,
-    additionalFees: [
-      { type: "fuel_surcharge", amount: 2.75 },
-      { type: "insurance", amount: 3.00 }
-    ],
-    totalCost: 60.75,
-    currency: "SEK"
-  },
-  
-  // Delivery Information
-  delivery: {
-    estimatedDays: 3,
-    estimatedDeliveryDate: ISODate("2024-01-18T17:00:00Z"),
-    serviceLevel: "standard",
-    trackingAvailable: true
-  },
-  
-  // Complete Scoring Results (embedded for performance)
-  scoring: {
-    eligibilityScore: 85,
-    primarySignal: 78,
-    secondarySignal: 95,
-    strategyScores: {
-      "delivery-speed": 60,
-      "environmental-impact": 80,
-      "cost-efficiency": 95,
-      "weight-efficiency": 100,
-      "dimension-efficiency": 90,
-      "capacity-utilization": 95
+  "shipment": {
+    "origin": {
+      "street": "123 Main St",
+      "city": "Stockholm",
+      "postalCode": "11122",
+      "country": "SE"
     },
-    isEligible: true,
-    eligibilityThreshold: 70,
-    reasons: [
-      "competitive pricing: 10 SEK/kg",
-      "good delivery speed: 3 days", 
-      "optimal weight utilization"
+    "destination": {
+      "street": "456 Oak Ave",
+      "city": "Gothenburg", 
+      "postalCode": "41138",
+      "country": "SE"
+    },
+    "packages": [
+      {
+        "weight": 2.5,
+        "length": 30,
+        "width": 20,
+        "height": 15
+      }
     ]
-  },
-  
-  // Shipment Context (minimal embedded data for queries)
-  shipmentContext: {
-    totalWeight: 5.5,
-    totalVolume: 9000,
-    originCountry: "SE",
-    destinationCountry: "NO",
-    packageCount: 1
-  },
-  
-  // Offer Metadata
-  metadata: {
-    generatedAt: ISODate("2024-01-15T10:30:00Z"),
-    expiresAt: ISODate("2024-01-15T16:30:00Z"), // 6-hour validity
-    status: "active", // active, expired, selected, cancelled
-    selectedAt: null,
-    customerId: "cust_67890",
-    version: "1.2.0" // Algorithm version for tracking
   }
 }
 ```
 
-### **Indexing Strategy for Offers**
-
-```javascript
-// Primary lookup
-db.offers.createIndex({ "offerId": 1 }, { unique: true })
-
-// Shipment offers (most common query)
-db.offers.createIndex({ "shipmentId": 1, "metadata.generatedAt": -1 })
-
-// Active offers for selection
-db.offers.createIndex({ 
-  "metadata.status": 1, 
-  "metadata.expiresAt": 1, 
-  "scoring.isEligible": 1 
-})
-
-// Cost-based sorting and filtering
-db.offers.createIndex({ "pricing.totalCost": 1 })
-
-// Eligibility score sorting
-db.offers.createIndex({ "scoring.eligibilityScore": -1 })
-
-// Carrier performance analysis
-db.offers.createIndex({ "carrier.carrierId": 1, "metadata.generatedAt": -1 })
-
-// Route-based queries
-db.offers.createIndex({ 
-  "shipmentContext.originCountry": 1, 
-  "shipmentContext.destinationCountry": 1 
-})
-
-// Customer offer history
-db.offers.createIndex({ "metadata.customerId": 1, "metadata.generatedAt": -1 })
-
-// Weight/volume range queries
-db.offers.createIndex({ "shipmentContext.totalWeight": 1 })
-db.offers.createIndex({ "shipmentContext.totalVolume": 1 })
-
-// TTL for expired offers (cleanup after 30 days)
-db.offers.createIndex({ "metadata.expiresAt": 1 }, { expireAfterSeconds: 2592000 })
+**Response:**
+```json
+[
+  {
+    "carrierId": "dhl-001",
+    "carrierName": "DHL",
+    "cost": 55.00,
+    "deliveryTime": 3,
+    "eligibilityScore": 85,
+    "costEfficiencyScore": 95,
+    "serviceQualityScore": 78,
+    "reasons": [
+      "competitive pricing: 10 SEK/kg",
+      "good delivery speed: 3 days"
+    ],
+    "isEligible": true
+  }
+]
 ```
 
-### **Schema Design Rationale**
+### GET /health
 
-#### **1. Denormalization Strategy**
-- **Embedded carrier data**: Eliminates joins for offer display, but requires careful updates when carrier data changes
-- **Embedded scoring results**: Stores complete eligibility calculation to avoid re-computation
-- **Minimal shipment context**: Only essential fields needed for offer queries and sorting
+Health check endpoint to verify API status.
 
-#### **2. Document Structure Decisions**
-- **Single collection approach**: All offer data in one document for optimal read performance
-- **Nested objects for logical grouping**: `pricing`, `delivery`, `scoring`, `metadata` for clear organization
-- **Array fields for flexible data**: `additionalFees`, `reasons` for variable-length data
+**Response:**
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "uptime": 123.456
+}
+```
 
-#### **3. Performance Optimizations**
-- **Compound indexes for common patterns**: Status + expiration + eligibility for active offers
-- **Pre-calculated fields**: `totalCost`, `eligibilityScore` to avoid runtime calculations
-- **TTL indexes**: Automatic cleanup of expired offers to prevent unbounded growth
+## 🏗️ Architecture
 
-#### **4. Query Patterns Supported**
-- **Get all offers for a shipment**: `{ shipmentId: "ship_12345" }`
-- **Find cheapest eligible offers**: `{ "scoring.isEligible": true }` sorted by `pricing.totalCost`
-- **Get best scoring offers**: `{ "scoring.isEligible": true }` sorted by `scoring.eligibilityScore`
-- **Carrier performance analysis**: `{ "carrier.carrierId": "dhl-001" }`
-- **Route-based queries**: `{ "shipmentContext.originCountry": "SE", "shipmentContext.destinationCountry": "NO" }`
+### Project Structure
+```
+src/
+├── config/          # Configuration files (Swagger setup)
+├── data/            # Static data (carriers, etc.)
+├── dto/             # Data Transfer Objects for validation
+├── middleware/      # Express middleware (error handling, etc.)
+├── routes/          # API route definitions
+├── services/        # Business logic services
+│   └── eligibility/ # Eligibility scoring strategies
+├── types/           # TypeScript type definitions
+└── utils/           # Utility functions (logging, shutdown)
+```
 
-#### **5. Scalability Considerations**
-- **Sharding strategy**: Shard by `metadata.customerId` for customer isolation
-- **Read replicas**: Use for analytics queries without affecting transactional operations
-- **Write optimization**: Batch inserts for offer generation during peak times
+### Key Components
 
----
+- **OffersService**: Main service for generating shipping offers
+- **EligibilityService**: Handles carrier eligibility scoring with multiple strategies
+- **Validation**: Request validation using class-validator DTOs
+- **Error Handling**: Global error middleware with structured error responses
+- **Logging**: Pino-based structured logging with HTTP request tracking
 
-## 🏆 Production Readiness
+### Eligibility Scoring Strategies
 
-**Rubric Score: 9.75/10** - Outstanding Production-Ready API
+The API uses multiple strategies to score carrier eligibility:
 
-This API is **production-ready** with the following features:
+1. **Cost Efficiency**: Evaluates pricing competitiveness
+2. **Service Quality**: Assesses delivery time and reliability
+3. **Capacity Utilization**: Considers carrier capacity and load balancing
+4. **Geographic Coverage**: Evaluates service area coverage
 
-### **✅ Implemented**
-- **Global Error Handling**: Comprehensive error management with structured responses
-- **Input Validation**: DTO-based validation with detailed error messages
-- **API Documentation**: Interactive Swagger UI with examples
-- **Request Logging**: All requests and responses are logged
-- **Health Checks**: Service health monitoring endpoint
-- **Type Safety**: Full TypeScript implementation with strict validation
-- **Testing**: 90%+ test coverage with 205 test cases
-- **Code Quality**: ESLint, Prettier, and strict TypeScript configuration
+## 🔧 Configuration
 
-### **Libraries**
+### Environment Variables
 
-#### **Right Motivations to Use Pino**
-- **Scalability**: As your API grows, you'll need proper logging infrastructure
-- **Monitoring**: Structured logs integrate with monitoring tools 
-- **Debugging**: Better log levels and filtering capabilities
-- **Performance**: Handle more requests per second
-- **Production Readiness**: Industry-standard logging solution
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `3000` |
+| `NODE_ENV` | Environment mode | `development` |
 
-#### **Right Motivations to Use Swagger for documentation**
-- **Interactive Documentation**: Provides a user-friendly UI for API exploration
-- **API Testing**: Built-in request builder for testing endpoints
-- **Standards Compliance**: OpenAPI/Swagger spec is an industry standard
-- **Code-First Approach**: Generate docs from code annotations
-- **Developer Experience**: Reduces onboarding time for API consumers
-- **API Versioning**: Helps track and manage API changes
-- **Schema Validation**: Auto-validates requests against defined schemas
-- **Mock Servers**: Can generate mock servers from API specs
+### Logging
 
-### **🔧 Optional Enhancements**
-- Security headers (helmet.js)
-- Rate limiting (express-rate-limit)
-- Structured logging with correlation IDs
+The API uses Pino for structured logging with different log levels:
+- **Info**: Normal operations and successful requests
+- **Warn**: Client errors (4xx status codes)
+- **Error**: Server errors (5xx status codes)
 
-## 🤖 AI Assistance
+## 🧪 Testing
 
-Used AI for the following:
-- **Code Architecture**: Strategy pattern implementation and service design
-- **API Development**: DTO creation, validation, and error handling
-- **Documentation**: Swagger integration and comprehensive API documentation
-- **Testing**: Test case development and coverage optimization
-- **Code Quality**: Refactoring, optimization, and best practices implementation
-- **Production Features**: Error handling, logging, and monitoring setup
-- **README Enhancement**: Documentation structure and content improvement
+The project includes comprehensive test coverage:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run specific test file
+npm test -- offers.service.spec.ts
+```
+
+Test files are located alongside source files with `.spec.ts` extension.
+
+## 📦 Dependencies
+
+### Production Dependencies
+- **express**: Web framework
+- **cors**: Cross-origin resource sharing
+- **class-validator**: Validation decorators
+- **class-transformer**: Object transformation
+- **pino**: Fast JSON logger
+- **swagger-jsdoc**: API documentation generation
+- **swagger-ui-express**: Swagger UI middleware
+
+### Development Dependencies
+- **typescript**: TypeScript compiler
+- **jest**: Testing framework
+- **eslint**: Code linting
+- **ts-node**: TypeScript execution for Node.js
+
+## 🚀 Deployment
+
+### Docker (Optional)
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY dist ./dist
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+### Environment Setup
+1. Set `NODE_ENV=production`
+2. Configure appropriate `PORT`
+3. Ensure all dependencies are installed
+4. Build the project: `npm run build`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-feature`
+3. Make your changes and add tests
+4. Run tests: `npm test`
+5. Run linting: `npm run lint`
+6. Commit your changes: `git commit -am 'Add new feature'`
+7. Push to the branch: `git push origin feature/new-feature`
+8. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+For support and questions:
+- Check the API documentation at `/api-docs`
+- Review the test files for usage examples
+- Open an issue in the repository
+
+## 🔄 Version History
+
+- **v1.0.0**: Initial release with core shipment offer functionality
+  - Basic carrier selection
+  - Eligibility scoring system
+  - Swagger documentation
+  - Comprehensive testing

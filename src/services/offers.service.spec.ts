@@ -32,14 +32,13 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
+      const results = await offersService.getOffers(request);
 
-      expect(result).toHaveLength(1);
-      expect(result[0].offers).toBeDefined();
-      expect(result[0].generatedAt).toBeInstanceOf(Date);
+      expect(results).toHaveLength(1);
+      expect(results).toBeDefined();
 
       // All returned offers should be eligible
-      result[0].offers.forEach(offer => {
+      results.forEach(offer => {
         expect(offer.isEligible).toBe(true);
         expect(offer.eligibilityScore).toBeGreaterThanOrEqual(DEFAULT_CONFIG.eligibilityThreshold);
       });
@@ -61,10 +60,9 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
+      const results = await offersService.getOffers(request);
 
-      expect(result).toHaveLength(1);
-      expect(result[0].offers).toHaveLength(0);
+      expect(results).toHaveLength(0);
     });
 
     it('should sort offers by cost ascending, then by eligibility score descending', async () => {
@@ -83,8 +81,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       if (offers.length > 1) {
         // Verify cost sorting (ascending)
@@ -115,8 +112,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       offers.forEach(offer => {
         const carrier = carriers.find(c => c.id === offer.carrierId);
@@ -143,8 +139,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       if (offers.length > 0) {
         const offer = offers[0];
@@ -183,8 +178,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       if (offers.length > 0) {
         const offer = offers[0];
@@ -212,8 +206,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       offers.forEach(offer => {
         expect(offer.cost).toBe(0);
@@ -229,8 +222,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       offers.forEach(offer => {
         expect(offer.cost).toBe(0);
@@ -254,8 +246,7 @@ describe('OffersService', () => {
       };
 
       const request: OfferRequest = { shipment };
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       // Verify cost calculation for each carrier
       offers.forEach(offer => {
@@ -280,8 +271,7 @@ describe('OffersService', () => {
       };
 
       const request: OfferRequest = { shipment };
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       offers.forEach(offer => {
         const carrier = carriers.find(c => c.id === offer.carrierId);
@@ -308,8 +298,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       offers.forEach(offer => {
         expect(typeof offer.serviceQualityScore).toBe('number');
@@ -337,12 +326,12 @@ describe('OffersService', () => {
       };
 
       const startTime = Date.now();
-      const result = await offersService.getOffers(request);
+      const offers = await offersService.getOffers(request);
       const endTime = Date.now();
 
       // Should complete quickly (less than 100ms for small dataset)
       expect(endTime - startTime).toBeLessThan(100);
-      expect(result).toBeDefined();
+      expect(offers).toBeDefined();
     });
   });
 
@@ -397,8 +386,7 @@ describe('OffersService', () => {
         }
       };
 
-      const result = await offersService.getOffers(request);
-      const offers = result[0].offers;
+      const offers = await offersService.getOffers(request);
 
       // All offers should be from eligible carriers
       offers.forEach(offer => {
