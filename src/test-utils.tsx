@@ -1,6 +1,6 @@
 // Custom test utilities for React Testing Library
-import React, { ReactElement } from 'react'
-import { render, RenderOptions } from '@testing-library/react'
+import type { ReactElement } from 'react'
+import { render, type RenderOptions } from '@testing-library/react'
 
 // Custom render function with providers
 const customRender = (
@@ -36,8 +36,6 @@ export const createMockFormData = (overrides = {}) => ({
   height: 15,
   dimensionUnit: 'cm',
   quantity: 1,
-  speedVsCost: 50,
-  maxTransitDays: 7,
   ...overrides,
 })
 

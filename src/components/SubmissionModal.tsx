@@ -1,6 +1,7 @@
-import { Modal, Button, Card, Heading, Text } from 'rsuite'
-import { Check, Close } from '@rsuite/icons'
+import { Modal, Button, Card, Heading } from 'rsuite'
+import { Close } from '@rsuite/icons'
 import type { SubmissionModalProps } from './types'
+import { sanitizeText } from '../utils/xss-protection'
 
 export const SubmissionModal: React.FC<SubmissionModalProps> = ({
   isOpen,
@@ -42,7 +43,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                   Confirmation
                 </Heading>
                 <p style={{ margin: '0.25rem 0 0 0', color: '#6B7280' }}>
-                  Please confirm your shipment with {selectedOffer.carrierName}.
+                  Please confirm your shipment with {sanitizeText(selectedOffer.carrierName)}.
                 </p>
               </div>
             </div>
@@ -89,7 +90,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div>
                     <strong>Carrier:</strong><br />
-                    {selectedOffer.carrierName}
+                    {sanitizeText(selectedOffer.carrierName)}
                   </div>
                   <div>
                     <strong>Delivery Time:</strong><br />
@@ -132,7 +133,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
                 role="alert"
                 aria-live="polite"
               >
-                {message}
+                {sanitizeText(message)}
               </div>
             </div>
           </div>

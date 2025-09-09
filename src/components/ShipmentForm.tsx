@@ -2,8 +2,7 @@ import { Panel, Form, SelectPicker, InputNumber, Button, HStack } from 'rsuite'
 import { Archive } from '@rsuite/icons'
 import type { ShipmentFormProps } from './types'
 import { COUNTRY_OPTIONS, UNIT_OPTIONS, DIMENSION_UNIT_OPTIONS } from '../data/constants'
-import { AdvancedOptions } from './AdvancedOptions'
-import { shipmentSchema } from '../validators/schema'
+import { shipmentSchema } from '../validators'
 
 export const ShipmentForm: React.FC<ShipmentFormProps> = ({
   formData,
@@ -195,6 +194,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
             </Form.HelpText>
           </Form.Group>
         </fieldset>
+
 
         {/* Actions */}
         <div 

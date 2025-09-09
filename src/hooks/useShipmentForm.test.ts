@@ -1,7 +1,7 @@
 // Integration tests for useShipmentForm hook using BDD patterns
 import { renderHook, act } from '@testing-library/react'
 import { useShipmentForm } from './useShipmentForm'
-import { createMockFormData, mockFetch, mockFetchError } from '../test-utils'
+import { createMockFormData } from '../test-utils'
 
 // Mock the useOffers hook
 const mockPostOffers = jest.fn()
@@ -34,8 +34,6 @@ describe('useShipmentForm Hook', () => {
         height: 0,
         dimensionUnit: 'cm',
         quantity: 1,
-        speedVsCost: 50,
-        maxTransitDays: 7,
       })
     })
 
@@ -119,8 +117,6 @@ describe('useShipmentForm Hook', () => {
         height: 0,
         dimensionUnit: 'cm',
         quantity: 1,
-        speedVsCost: 50,
-        maxTransitDays: 7,
       })
     })
 
@@ -241,7 +237,15 @@ describe('useShipmentForm Hook', () => {
       // Mock the form ref to return true for validation
       result.current.formRef.current = {
         check: jest.fn().mockReturnValue(true),
-      } as any
+        checkAsync: jest.fn(),
+        checkForField: jest.fn(),
+        checkForFieldAsync: jest.fn(),
+        root: null,
+        submit: jest.fn(),
+        reset: jest.fn(),
+        cleanErrors: jest.fn(),
+        cleanErrorForField: jest.fn(),
+      } as unknown as import('rsuite').FormInstance
 
       // When
       await act(async () => {
@@ -262,7 +266,15 @@ describe('useShipmentForm Hook', () => {
       // Mock the form ref to return true for validation
       result.current.formRef.current = {
         check: jest.fn().mockReturnValue(true),
-      } as any
+        checkAsync: jest.fn(),
+        checkForField: jest.fn(),
+        checkForFieldAsync: jest.fn(),
+        root: null,
+        submit: jest.fn(),
+        reset: jest.fn(),
+        cleanErrors: jest.fn(),
+        cleanErrorForField: jest.fn(),
+      } as unknown as import('rsuite').FormInstance
 
       // When
       await act(async () => {

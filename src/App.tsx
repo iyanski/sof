@@ -1,4 +1,4 @@
-import { Container, Content } from 'rsuite'
+import { Container } from 'rsuite'
 import {
   Header,
   HeroSection,

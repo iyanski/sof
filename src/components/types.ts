@@ -11,8 +11,6 @@ export interface ShipmentFormData {
   height: number
   dimensionUnit: string
   quantity: number
-  speedVsCost: number
-  maxTransitDays: number
 }
 
 export interface ShipmentRequest {
@@ -62,10 +60,6 @@ export interface HeaderProps {
   subtitle: string
 }
 
-export interface AdvancedOptionsProps {
-  formData: Pick<ShipmentFormData, 'speedVsCost' | 'maxTransitDays'>
-  disabled?: boolean
-}
 
 export interface SubmissionModalProps {
   isOpen: boolean

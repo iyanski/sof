@@ -23,10 +23,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     
-    /* Testing */
+    /* Module resolution */
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["jest", "@testing-library/jest-dom"],
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": ["src"]

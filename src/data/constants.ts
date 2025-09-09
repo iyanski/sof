@@ -32,6 +32,4 @@ export const DEFAULT_FORM_DATA = {
   height: 0,
   dimensionUnit: 'cm',
   quantity: 1,
-  speedVsCost: 50,
-  maxTransitDays: 7
 } as const

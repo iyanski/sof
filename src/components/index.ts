@@ -2,7 +2,6 @@
 export { Header } from './Header'
 export { HeroSection } from './HeroSection'
 export { ShipmentForm } from './ShipmentForm'
-export { AdvancedOptions } from './AdvancedOptions'
 export { FormField } from './FormField'
 export { SubmissionModal } from './SubmissionModal'
 export { OffersList } from './OffersList'
