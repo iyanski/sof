@@ -50,8 +50,6 @@ export const OffersList: React.FC<OffersListProps> = ({
   const handleSelectOffer = (offer: Offer) => {
     if (onSelectOffer) {
       onSelectOffer(offer)
-    } else {
-      console.log('Selected offer:', offer)
     }
   }
 

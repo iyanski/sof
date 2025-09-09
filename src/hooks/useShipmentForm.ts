@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import type { FormInstance } from 'rsuite'
 import type { ShipmentFormData, Offer } from '../components/types'
 import { DEFAULT_FORM_DATA } from '../data/constants'
@@ -22,10 +22,6 @@ export const useShipmentForm = () => {
     // Clear errors when form changes
     setErrors({})
   }
-
-  useEffect(() => {
-    console.log('Offers:', offers)
-  }, [offers])
 
   const handleSubmit = async () => {
     if (!formRef.current) return

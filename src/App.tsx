@@ -35,8 +35,6 @@ function App() {
     document.getElementById('shipment-form')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  console.log('Offers:', offers)
-
   return (
     <Container style={styles.container}>
       {/* Skip link for keyboard users */}

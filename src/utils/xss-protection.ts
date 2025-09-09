@@ -115,7 +115,7 @@ export const sanitizeFormData = (data: Record<string, unknown>): Record<string, 
         typeof item === 'string' ? sanitizeText(item) : item
       )
     } else if (value && typeof value === 'object') {
-      sanitized[key] = sanitizeFormData(value)
+      sanitized[key] = sanitizeFormData(value as Record<string, unknown>)
     } else {
       sanitized[key] = value
     }

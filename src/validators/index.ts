@@ -3,15 +3,8 @@
  * This file provides a clean API for all validation-related functionality
  */
 
-// Base schemas for common field types
-export {
-  countrySchema,
-  weightUnitSchema,
-  dimensionUnitSchema,
-  weightSchema,
-  dimensionSchema,
-  quantitySchema
-} from './base'
+// Note: Individual base schemas are used internally but not exported
+// as they are only needed for building the main shipmentSchema
 
 // Organized schemas for different form types
 export {
