@@ -4,67 +4,67 @@ This file contains the complete commit history for the API repository, extracted
 
 ## Commit History (Chronological Order)
 
-### bda983d - iyanski, 2 days ago : Initial commit
+### bda983d - iyanski, 2025-09-07 11:41:35 +0100 : Initial commit
 - Initial setup of the API repository
 - Basic project structure with package.json, tsconfig.json
 - Initial index.ts file
 
-### d9c9568 - iyanski, 2 days ago : Add types and initial route
+### d9c9568 - iyanski, 2025-09-07 11:47:20 +0100 : Add types and initial route
 - Added TypeScript type definitions
 - Created initial route structure
 - Set up basic Express.js routing
 
-### 37ea399 - iyanski, 2 days ago : Add test and offer service
+### 37ea399 - iyanski, 2025-09-07 12:07:07 +0100 : Add test and offer service
 - Implemented offer service functionality
 - Added comprehensive test coverage
 - Created service layer architecture
 
-### 55dcb8c - iyanski, 2 days ago : Add initial catalog
+### 55dcb8c - iyanski, 2025-09-07 16:09:36 +0100 : Add initial catalog
 - Added carrier data catalog
 - Implemented static data management
 - Set up data layer structure
 
-### 1782bc8 - iyanski, 35 hours ago : Add tests for elibility service
+### 1782bc8 - iyanski, 2025-09-08 09:55:32 +0100 : Add tests for elibility service
 - Added eligibility service tests
 - Implemented test coverage for business logic
 - Set up Jest testing framework
 
-### 4281056 - iyanski, 21 hours ago : Add test and implementation for eligibility service
+### 4281056 - iyanski, 2025-09-08 23:36:39 +0100 : Add test and implementation for eligibility service
 - Implemented eligibility service core functionality
 - Added comprehensive test suite
 - Created eligibility scoring algorithms
 
-### fd75e3c - iyanski, 15 hours ago : Refactor eligibility service and add necessary tests
+### fd75e3c - iyanski, 2025-09-09 05:38:52 +0100 : Refactor eligibility service and add necessary tests
 - Refactored eligibility service for better maintainability
 - Enhanced test coverage
 - Improved code organization
 
-### 6a56114 - iyanski, 8 hours ago : Update test and make them less brittle to eligibilityThreshold changes
+### 6a56114 - iyanski, 2025-09-09 13:00:24 +0100 : Update test and make them less brittle to eligibilityThreshold changes
 - Updated tests to be more resilient
 - Improved test stability
 - Enhanced eligibility threshold handling
 
-### 7454886 - iyanski, 8 hours ago : Move types to different files for organization purposes
+### 7454886 - iyanski, 2025-09-09 13:29:13 +0100 : Move types to different files for organization purposes
 - Reorganized TypeScript type definitions
 - Improved code structure and maintainability
 - Separated concerns for better organization
 
-### 8b4ad9f - iyanski, 7 hours ago : Use pino for logging for better performance than console.logs
+### 8b4ad9f - iyanski, 2025-09-09 13:44:23 +0100 : Use pino for logging for better performance than console.logs
 - Replaced console.log with Pino logger
 - Improved logging performance
 - Enhanced structured logging capabilities
 
-### 6450e54 - iyanski, 7 hours ago : Remove address import from package
+### 6450e54 - iyanski, 2025-09-09 13:45:41 +0100 : Remove address import from package
 - Cleaned up package imports
 - Removed unused address imports
 - Improved code cleanliness
 
-### 14c6ef9 - iyanski, 7 hours ago : Add graceful shutdown handling
+### 14c6ef9 - iyanski, 2025-09-09 13:57:42 +0100 : Add graceful shutdown handling
 - Implemented graceful server shutdown
 - Added proper cleanup procedures
 - Enhanced production readiness
 
-### 6c7ced7 - iyanski, 3 hours ago : Modify the API result to return array of offers
+### 6c7ced7 - iyanski, 2025-09-09 17:48:07 +0100 : Modify the API result to return array of offers
 - Updated API response format
 - Changed from single offer to array of offers
 - Enhanced API functionality
