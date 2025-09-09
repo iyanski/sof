@@ -1,4 +1,5 @@
 import React from 'react'
+import { styles } from './Badge.styles'
 
 interface BadgeProps {
   children: React.ReactNode
@@ -71,15 +72,11 @@ export const Badge: React.FC<BadgeProps> = ({
       style={{
         ...getVariantStyles(),
         ...getSizeStyles(),
-        borderRadius: '12px',
-        fontWeight: '500',
-        display: 'inline-block',
-        lineHeight: 1,
-        textAlign: 'center',
-        whiteSpace: 'nowrap'
+        ...styles.badge
       }}
     >
       {children}
     </span>
   )
 }
+

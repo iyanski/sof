@@ -1,7 +1,8 @@
 import { Modal, Button, Card, Heading } from 'rsuite'
 import { Close } from '@rsuite/icons'
-import type { SubmissionModalProps } from './types'
-import { sanitizeText } from '../utils/xss-protection'
+import type { SubmissionModalProps } from '../types'
+import { sanitizeText } from '../../utils/xss-protection'
+import { styles } from './SubmissionModal.styles'
 
 export const SubmissionModal: React.FC<SubmissionModalProps> = ({
   isOpen,
@@ -29,35 +30,30 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
       
       <Modal.Body>
         {isSuccess && selectedOffer && formData ? (
-          <div style={{ padding: '1rem 0' }}>
+          <div style={styles.successContainer}>
             {/* Success Header */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '1rem',
-              marginBottom: '1.5rem'
-            }}>
-              <div style={{ fontSize: '2rem' }} aria-hidden="true">✅</div>
+            <div style={styles.successHeader}>
+              <div style={styles.successIcon} aria-hidden="true">✅</div>
               <div>
                 <Heading level={3}>
                   Confirmation
                 </Heading>
-                <p style={{ margin: '0.25rem 0 0 0', color: '#6B7280' }}>
+                <p style={styles.successMessage}>
                   Please confirm your shipment with {sanitizeText(selectedOffer.carrierName)}.
                 </p>
               </div>
             </div>
 
             {/* Shipment Details Card */}
-            <Card style={{ marginBottom: '1rem' }}>
+            <Card style={styles.cardMargin}>
               <Card.Header>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ fontSize: '1.2rem' }} aria-hidden="true">📦</span>
+                <div style={styles.cardHeader}>
+                  <span style={styles.cardIcon} aria-hidden="true">📦</span>
                   <strong>Shipment Details</strong>
                 </div>
               </Card.Header>
               <Card.Body>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={styles.gridTwoColumns}>
                   <div>
                     <strong>Route:</strong><br />
                     {formData.originCountry} → {formData.destinationCountry}
@@ -81,13 +77,13 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
             {/* Selected Carrier Card */}
             <Card>
               <Card.Header>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ fontSize: '1.2rem' }} aria-hidden="true">🚚</span>
+                <div style={styles.cardHeader}>
+                  <span style={styles.cardIcon} aria-hidden="true">🚚</span>
                   <strong>Selected Carrier</strong>
                 </div>
               </Card.Header>
               <Card.Body>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={styles.gridTwoColumns}>
                   <div>
                     <strong>Carrier:</strong><br />
                     {sanitizeText(selectedOffer.carrierName)}
@@ -113,23 +109,11 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
             </Card>
           </div>
         ) : (
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'flex-start', 
-            gap: '1rem',
-            padding: '1rem 0'
-          }}>
-            <Close style={{ fontSize: '2rem', color: '#EF4444', marginTop: '0.25rem' }} aria-hidden="true" />
-            <div style={{ flex: 1 }}>
+          <div style={styles.errorContainer}>
+            <Close style={styles.errorIcon} aria-hidden="true" />
+            <div style={styles.errorContent}>
               <div 
-                style={{ 
-                  margin: 0, 
-                  fontSize: '0.9rem', 
-                  lineHeight: '1.5',
-                  fontFamily: 'inherit',
-                  whiteSpace: 'pre-wrap',
-                  wordWrap: 'break-word'
-                }}
+                style={styles.errorMessage}
                 role="alert"
                 aria-live="polite"
               >
@@ -144,7 +128,9 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
         <Button 
           appearance="primary" 
           onClick={onClose}
-          style={{ backgroundColor: isSuccess ? '#10B981' : '#EF4444' }}
+          style={{
+            backgroundColor: isSuccess ? '#10B981' : '#EF4444'
+          }}
           aria-label={isSuccess ? 'Continue with shipment' : 'Try again'}
         >
           {isSuccess ? 'Continue' : 'Try Again'}
@@ -153,3 +139,4 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
     </Modal>
   )
 }
+

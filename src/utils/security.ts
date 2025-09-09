@@ -43,7 +43,7 @@ export const sanitizeString = (input: string): string => {
  */
 export const validateCountryCode = (country: string): string | null => {
   const sanitized = sanitizeString(country)
-  return ALLOWED_COUNTRIES.includes(sanitized as any) ? sanitized : null
+  return ALLOWED_COUNTRIES.includes(sanitized as typeof ALLOWED_COUNTRIES[number]) ? sanitized : null
 }
 
 /**
@@ -51,7 +51,7 @@ export const validateCountryCode = (country: string): string | null => {
  */
 export const validateWeightUnit = (unit: string): string | null => {
   const sanitized = sanitizeString(unit)
-  return ALLOWED_WEIGHT_UNITS.includes(sanitized as any) ? sanitized : null
+  return ALLOWED_WEIGHT_UNITS.includes(sanitized as typeof ALLOWED_WEIGHT_UNITS[number]) ? sanitized : null
 }
 
 /**
@@ -59,7 +59,7 @@ export const validateWeightUnit = (unit: string): string | null => {
  */
 export const validateDimensionUnit = (unit: string): string | null => {
   const sanitized = sanitizeString(unit)
-  return ALLOWED_DIMENSION_UNITS.includes(sanitized as any) ? sanitized : null
+  return ALLOWED_DIMENSION_UNITS.includes(sanitized as typeof ALLOWED_DIMENSION_UNITS[number]) ? sanitized : null
 }
 
 /**

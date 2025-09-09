@@ -14,6 +14,7 @@ export const useShipmentForm = () => {
   const [modalMessage, setModalMessage] = useState('')
   const [offers, setOffers] = useState<Offer[]>([])
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null)
+  const [offersRequested, setOffersRequested] = useState(false)
   const formRef = useRef<FormInstance>(null)
 
   const handleFormChange = (formValue: Record<string, unknown>) => {
@@ -39,6 +40,7 @@ export const useShipmentForm = () => {
       const offersResponse: Offer[] = await postOffers(shipmentRequest)
 
       setOffers(offersResponse || [])
+      setOffersRequested(true)
     } catch (error) {
       // Show error modal
       console.error('Error submitting shipment request:', error)
@@ -51,6 +53,8 @@ export const useShipmentForm = () => {
   const handleReset = () => {
     setFormData(DEFAULT_FORM_DATA)
     setErrors({})
+    setOffers([])
+    setOffersRequested(false)
   }
 
   const handleCloseModal = () => {
@@ -73,6 +77,7 @@ export const useShipmentForm = () => {
     isLoading,
     offers,
     selectedOffer,
+    offersRequested,
     formRef,
     modalOpen,
     modalSuccess,

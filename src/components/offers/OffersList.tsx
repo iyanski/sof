@@ -1,7 +1,8 @@
 import React from 'react'
-import type { Offer } from './types'
+import type { Offer } from '../types'
 import { OfferCard } from './OfferCard'
 import { Content, Heading } from 'rsuite'
+import { styles } from './OffersList.styles'
 
 interface OffersListProps {
   offers: Offer[]
@@ -59,7 +60,7 @@ export const OffersList: React.FC<OffersListProps> = ({
       <Heading 
         level={4}
         id="offers-heading"
-        style={{ marginBottom: '1.5rem' }}
+        style={styles.heading}
       >
         Available Offers
       </Heading>
@@ -83,18 +84,14 @@ export const OffersList: React.FC<OffersListProps> = ({
         </div>
       ) : (
         <div 
-          style={{
-            textAlign: 'center',
-            padding: '48px 24px',
-            color: '#6B7280'
-          }}
+          style={styles.emptyState}
           role="status"
           aria-live="polite"
         >
-          <p style={{ fontSize: '18px', marginBottom: '8px' }}>
+          <p style={styles.emptyStateTitle}>
             No offers available
           </p>
-          <p style={{ fontSize: '14px' }}>
+          <p style={styles.emptyStateSubtitle}>
             Try adjusting your shipment details or filters
           </p>
         </div>

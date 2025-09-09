@@ -1,4 +1,5 @@
 import React from 'react'
+import { styles } from './Pill.styles'
 
 interface PillProps {
   score: number
@@ -23,16 +24,9 @@ export const Pill: React.FC<PillProps> = ({ score, maxScore = 100 }) => {
   return (
     <div
       style={{
+        ...styles.pill,
         backgroundColor: getScoreBackground(score),
         color: getScoreColor(score),
-        padding: '6px 12px',
-        borderRadius: '16px',
-        fontSize: '14px',
-        fontWeight: '600',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minWidth: '60px',
         border: `1px solid ${getScoreColor(score)}20`
       }}
     >
@@ -40,3 +34,4 @@ export const Pill: React.FC<PillProps> = ({ score, maxScore = 100 }) => {
     </div>
   )
 }
+

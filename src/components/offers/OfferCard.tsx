@@ -1,8 +1,9 @@
 import React from 'react'
 import { Card, Button, Tooltip, Whisper, Rate, ButtonToolbar } from 'rsuite'
-import type { Offer } from './types'
-import { Badge } from './Badge'
-import { Pill } from './Pill'
+import type { Offer } from '../types'
+import { Badge } from '../ui/Badge'
+import { Pill } from '../ui/Pill'
+import { styles } from './OfferCard.styles'
 
 interface OfferCardProps {
   offer: Offer
@@ -45,9 +46,9 @@ export const OfferCard: React.FC<OfferCardProps> = ({
     }
 
     return (
-      <div style={{ padding: '12px', minWidth: '200px' }}>
-        <div style={{ marginBottom: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+      <div style={styles.tooltipContainer}>
+        <div style={styles.tooltipSection}>
+          <div style={styles.tooltipRow}>
             <strong>Eligibility:</strong>
             <span>{offer.eligibilityScore}/100</span>
           </div>
@@ -55,12 +56,12 @@ export const OfferCard: React.FC<OfferCardProps> = ({
             value={convertToRating(offer.eligibilityScore)} 
             size="xs" 
             readOnly 
-            style={{ marginLeft: '8px' }}
+            style={styles.tooltipRate}
           />
         </div>
         
-        <div style={{ marginBottom: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+        <div style={styles.tooltipSection}>
+          <div style={styles.tooltipRow}>
             <strong>Cost Efficiency:</strong>
             <span>{offer.costEfficiencyScore}/100</span>
           </div>
@@ -68,12 +69,12 @@ export const OfferCard: React.FC<OfferCardProps> = ({
             value={convertToRating(offer.costEfficiencyScore)} 
             size="xs" 
             readOnly 
-            style={{ marginLeft: '8px' }}
+            style={styles.tooltipRate}
           />
         </div>
         
-        <div style={{ marginBottom: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+        <div style={styles.tooltipSection}>
+          <div style={styles.tooltipRow}>
             <strong>Service Quality:</strong>
             <span>{offer.serviceQualityScore}/100</span>
           </div>
@@ -81,12 +82,12 @@ export const OfferCard: React.FC<OfferCardProps> = ({
             value={convertToRating(offer.serviceQualityScore)} 
             size="xs" 
             readOnly 
-            style={{ marginLeft: '8px' }}
+            style={styles.tooltipRate}
           />
         </div>
         
-        <div style={{ marginTop: '8px', borderTop: '1px solid #e5e7eb', paddingTop: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+        <div style={styles.tooltipTotalSection}>
+          <div style={styles.tooltipRow}>
             <strong>Total Score:</strong>
             <span>{getTotalScore()}/100</span>
           </div>
@@ -94,7 +95,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({
             value={convertToRating(getTotalScore())} 
             size="xs" 
             readOnly 
-            style={{ marginLeft: '8px' }}
+            style={styles.tooltipRate}
           />
         </div>
       </div>
@@ -104,42 +105,25 @@ export const OfferCard: React.FC<OfferCardProps> = ({
   return (
     <Card
       style={{
-        borderRadius: '8px',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        marginBottom: '16px',
+        ...styles.card,
         opacity: offer.isEligible ? 1 : 0.6
       }}
       role="article"
       aria-labelledby={`offer-${offer.carrierId}-title`}
       aria-describedby={`offer-${offer.carrierId}-description`}
     >
-      <Card.Body style={{ padding: '16px' }}>
+      <Card.Body style={styles.cardBody}>
         {/* Header with carrier info and badges */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'flex-start',
-          marginBottom: '16px'
-        }}>
+        <div style={styles.header}>
           <div>
             <h3 
               id={`offer-${offer.carrierId}-title`}
-              style={{ 
-                margin: 0, 
-                fontSize: '18px', 
-                fontWeight: 'bold',
-                color: '#111827'
-              }}
+              style={styles.carrierName}
             >
               {offer.carrierName}
             </h3>
             <div 
-              style={{ 
-                display: 'flex', 
-                gap: '8px', 
-                marginTop: '8px',
-                flexWrap: 'wrap'
-              }}
+              style={styles.badgesContainer}
               role="group"
               aria-label="Offer badges"
             >
@@ -174,52 +158,30 @@ export const OfferCard: React.FC<OfferCardProps> = ({
         {/* Price and delivery info */}
         <div 
           id={`offer-${offer.carrierId}-description`}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '16px',
-            padding: '12px',
-            backgroundColor: '#F9FAFB',
-            borderRadius: '6px'
-          }}
+          style={styles.detailsContainer}
           role="group"
           aria-label="Offer details"
         >
           <div>
             <div 
-              style={{ 
-                fontSize: '24px', 
-                fontWeight: 'bold',
-                color: '#111827'
-              }}
+              style={styles.price}
               aria-label={`Total cost: ${formatPrice(offer.cost)}`}
             >
               {formatPrice(offer.cost)}
             </div>
-            <div style={{ 
-              fontSize: '14px', 
-              color: '#6B7280'
-            }}>
+            <div style={styles.priceLabel}>
               Total cost
             </div>
           </div>
           
-          <div style={{ textAlign: 'right' }}>
+          <div style={styles.deliveryContainer}>
             <div 
-              style={{ 
-                fontSize: '18px', 
-                fontWeight: '600',
-                color: '#111827'
-              }}
+              style={styles.deliveryTime}
               aria-label={`Delivery time: ${formatDeliveryTime(offer.deliveryTime)}`}
             >
               {formatDeliveryTime(offer.deliveryTime)}
             </div>
-            <div style={{ 
-              fontSize: '14px', 
-              color: '#6B7280'
-            }}>
+            <div style={styles.deliveryLabel}>
               Delivery time
             </div>
           </div>
@@ -228,29 +190,14 @@ export const OfferCard: React.FC<OfferCardProps> = ({
         {/* Eligibility status */}
         {!offer.isEligible && offer.reasons.length > 0 && (
           <div 
-            style={{ 
-              marginBottom: '16px',
-              padding: '8px 12px',
-              backgroundColor: '#FEF2F2',
-              border: '1px solid #FECACA',
-              borderRadius: '6px'
-            }}
+            style={styles.eligibilityAlert}
             role="alert"
             aria-live="polite"
           >
-            <div style={{ 
-              fontSize: '14px', 
-              color: '#DC2626',
-              fontWeight: '500'
-            }}>
+            <div style={styles.eligibilityTitle}>
               Not eligible:
             </div>
-            <ul style={{ 
-              margin: '4px 0 0 0', 
-              paddingLeft: '16px',
-              fontSize: '13px',
-              color: '#DC2626'
-            }}>
+            <ul style={styles.eligibilityReasons}>
               {offer.reasons.map((reason, index) => (
                 <li key={index}>{reason}</li>
               ))}
@@ -260,7 +207,7 @@ export const OfferCard: React.FC<OfferCardProps> = ({
 
         {/* Action buttons */}
         <ButtonToolbar 
-          style={{ display: 'flex', justifyContent: 'flex-end' }}
+          style={styles.buttonToolbar}
           role="group"
           aria-label="Offer actions"
         >
@@ -279,3 +226,4 @@ export const OfferCard: React.FC<OfferCardProps> = ({
     </Card>
   )
 }
+

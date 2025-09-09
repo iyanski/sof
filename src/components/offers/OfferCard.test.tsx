@@ -2,7 +2,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { OfferCard } from './OfferCard'
-import { createMockOffer } from '../test-utils'
+import { createMockOffer } from '../../test-utils'
 
 describe('OfferCard Component', () => {
   describe('when rendering an eligible offer', () => {

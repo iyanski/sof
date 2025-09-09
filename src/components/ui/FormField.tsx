@@ -1,5 +1,6 @@
 import { Form, Message } from 'rsuite'
-import type { FormFieldProps } from './types'
+import type { FormFieldProps } from '../types'
+import { styles } from './FormField.styles'
 
 interface FormFieldComponentProps extends FormFieldProps {
   children: React.ReactNode
@@ -17,14 +18,15 @@ export const FormField: React.FC<FormFieldComponentProps> = ({
     <Form.Group style={style}>
       <Form.ControlLabel>
         {label}
-        {required && <span style={{ color: 'red', marginLeft: '2px' }}>*</span>}
+        {required && <span style={styles.required}>*</span>}
       </Form.ControlLabel>
       {children}
       {error && (
-        <Message type="error" style={{ marginTop: '0.5rem' }}>
+        <Message type="error" style={styles.errorMessage}>
           {error}
         </Message>
       )}
     </Form.Group>
   )
 }
+

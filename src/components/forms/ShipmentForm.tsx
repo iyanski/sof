@@ -1,8 +1,9 @@
-import { Panel, Form, SelectPicker, InputNumber, Button, HStack } from 'rsuite'
+import { Panel, Form, SelectPicker, InputNumber, Button, HStack, Heading } from 'rsuite'
 import { Archive } from '@rsuite/icons'
-import type { ShipmentFormProps } from './types'
-import { COUNTRY_OPTIONS, UNIT_OPTIONS, DIMENSION_UNIT_OPTIONS } from '../data/constants'
-import { shipmentSchema } from '../validators'
+import type { ShipmentFormProps } from '../types'
+import { COUNTRY_OPTIONS, UNIT_OPTIONS, DIMENSION_UNIT_OPTIONS } from '../../data/constants'
+import { shipmentSchema } from '../../validators'
+import { styles } from './ShipmentForm.styles'
 
 export const ShipmentForm: React.FC<ShipmentFormProps> = ({
   formData,
@@ -16,18 +17,15 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
     <Panel 
       id="shipment-form"
       header={
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={styles.header}>
           <Archive aria-hidden="true" />
-          <h2 id="shipment-form-heading" style={{ fontWeight: 'bold', margin: 0 }}>New Shipment</h2>
+          <Heading level={4} id="shipment-form-heading">
+            New Shipment
+          </Heading>
         </div>
       }
       bordered
-      style={{ 
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-        marginBottom: '2rem'
-      }}
+      style={styles.panel}
       role="form"
       aria-labelledby="shipment-form-heading"
     >
@@ -40,15 +38,11 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
         onSubmit={onSubmit}
       >
         {/* Origin and Destination */}
-        <fieldset style={{ border: 'none', margin: 0, padding: 0 }}>
-          <legend style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '1rem', color: '#374151' }}>
+        <fieldset style={styles.fieldset}>
+          <legend style={styles.legend}>
             Route Information
           </legend>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: '1.5rem' 
-          }}>
+          <div style={styles.gridContainer}>
             <Form.Group controlId="originCountry">
               <Form.ControlLabel>Origin Country *</Form.ControlLabel>
               <Form.Control
@@ -56,7 +50,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                 accepter={SelectPicker}
                 data={COUNTRY_OPTIONS}
                 placeholder="Select origin country"
-                style={{ width: '100%' }}
+                style={styles.fullWidth}
                 disabled={isLoading}
                 aria-required="true"
                 aria-describedby="origin-country-help"
@@ -73,7 +67,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                 accepter={SelectPicker}
                 data={COUNTRY_OPTIONS}
                 placeholder="Select destination country"
-                style={{ width: '100%' }}
+                style={styles.fullWidth}
                 disabled={isLoading}
                 aria-required="true"
                 aria-describedby="destination-country-help"
@@ -86,23 +80,19 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
         </fieldset>
 
         {/* Weight and Quantity */}
-        <fieldset style={{ border: 'none', margin: '1.5rem 0 0 0', padding: 0 }}>
-          <legend style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '1rem', color: '#374151' }}>
+        <fieldset style={styles.fieldsetWithMargin}>
+          <legend style={styles.legend}>
             Package Details
           </legend>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '1.5rem'
-          }}>
+          <div style={styles.gridContainerSmall}>
             <Form.Group controlId="weight">
               <Form.ControlLabel>Weight *</Form.ControlLabel>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <div style={styles.flexContainer}>
                 <Form.Control
                   name="weight"
                   accepter={InputNumber}
                   placeholder="0"
-                  style={{ flex: 1 }}
+                  style={styles.flexItem}
                   disabled={isLoading}
                   aria-required="true"
                   aria-describedby="weight-help"
@@ -111,7 +101,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                   name="weightUnit"
                   accepter={SelectPicker}
                   data={UNIT_OPTIONS}
-                  style={{ width: '80px' }}
+                  style={styles.unitWidth}
                   disabled={isLoading}
                   aria-label="Weight unit"
                 />
@@ -128,7 +118,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                 accepter={InputNumber}
                 placeholder="1"
                 min={1}
-                style={{ width: '100%' }}
+                style={styles.fullWidth}
                 disabled={isLoading}
                 aria-required="true"
                 aria-describedby="quantity-help"
@@ -141,12 +131,12 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
         </fieldset>
 
         {/* Dimensions */}
-        <fieldset style={{ border: 'none', margin: '1.5rem 0 0 0', padding: 0 }}>
-          <legend style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '1rem', color: '#374151' }}>
+        <fieldset style={styles.fieldsetWithMargin}>
+          <legend style={styles.legend}>
             Package Dimensions
           </legend>
           <Form.Group controlId="dimensions">
-            <HStack spacing={10} style={{ marginBottom: '10px' }}>
+            <HStack spacing={10} style={styles.hStackMargin}>
               <HStack.Item>
                 <Form.ControlLabel>Dimensions *</Form.ControlLabel>
               </HStack.Item>
@@ -155,13 +145,13 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
                   name="dimensionUnit"
                   accepter={SelectPicker}
                   data={DIMENSION_UNIT_OPTIONS}
-                  style={{ width: '80px' }}
+                  style={styles.unitWidth}
                   disabled={isLoading}
                   aria-label="Dimension unit"
                 />
               </HStack.Item>
             </HStack>
-            <HStack spacing={10} style={{ marginBottom: '10px' }} justifyContent="flex-start">
+            <HStack spacing={10} style={styles.hStackMargin} justifyContent="flex-start">
               <Form.Control
                 name="length"
                 accepter={InputNumber}
@@ -198,12 +188,7 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
 
         {/* Actions */}
         <div 
-          style={{ 
-            marginTop: '2rem', 
-            display: 'flex', 
-            gap: '1rem', 
-            justifyContent: 'flex-end' 
-          }}
+          style={styles.actionsContainer}
           role="group"
           aria-label="Form actions"
         >
@@ -235,3 +220,4 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
     </Panel>
   )
 }
+

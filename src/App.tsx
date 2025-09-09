@@ -1,13 +1,17 @@
 import { Container } from 'rsuite'
+import { Suspense, lazy } from 'react'
 import {
   Header,
   HeroSection,
-  ShipmentForm,
-  SubmissionModal,
-  OffersList,
   useShipmentForm,
+  LoadingSpinner,
 } from './components'
 import './App.css'
+
+// Lazy load components for better performance
+const ShipmentForm = lazy(() => import('./components/forms/ShipmentForm').then(module => ({ default: module.ShipmentForm })))
+const SubmissionModal = lazy(() => import('./components/modals/SubmissionModal').then(module => ({ default: module.SubmissionModal })))
+const OffersList = lazy(() => import('./components/offers/OffersList').then(module => ({ default: module.OffersList })))
 
 function App() {
   const {
@@ -19,6 +23,7 @@ function App() {
     modalMessage,
     offers,
     selectedOffer,
+    offersRequested,
     handleFormChange,
     handleSubmit,
     handleReset,
@@ -33,21 +38,11 @@ function App() {
   console.log('Offers:', offers)
 
   return (
-    <Container style={{ backgroundColor: '#F9FAFB', minHeight: '100vh' }}>
+    <Container style={styles.container}>
       {/* Skip link for keyboard users */}
       <a 
         href="#main-content" 
-        style={{
-          position: 'absolute',
-          top: '-40px',
-          left: '6px',
-          background: '#000',
-          color: '#fff',
-          padding: '8px',
-          textDecoration: 'none',
-          zIndex: 1000,
-          borderRadius: '4px'
-        }}
+        style={styles.skipLink}
         onFocus={(e) => e.target.style.top = '6px'}
         onBlur={(e) => e.target.style.top = '-40px'}
       >
@@ -61,38 +56,69 @@ function App() {
       
       <main 
         id="main-content"
-        style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1rem 2rem 1rem' }}
+        style={styles.main}
         role="main"
         aria-label="Shipment form and offers"
       >
         <HeroSection onScrollToForm={handleScrollToForm} />
 
         <section aria-labelledby="shipment-form-heading">
-          <ShipmentForm
-            formData={formData}
-            isLoading={isLoading}
-            formRef={formRef}
-            onFormChange={handleFormChange}
-            onSubmit={handleSubmit}
-            onReset={handleReset}
-          />
+          <Suspense fallback={<LoadingSpinner message="Loading shipment form..." />}>
+            <ShipmentForm
+              formData={formData}
+              isLoading={isLoading}
+              formRef={formRef}
+              onFormChange={handleFormChange}
+              onSubmit={handleSubmit}
+              onReset={handleReset}
+            />
+          </Suspense>
         </section>
 
-        <section aria-labelledby="offers-heading">
-          <OffersList offers={offers} onSelectOffer={handleSelectOffer}/>
-        </section>
+        {offersRequested && (
+          <section aria-labelledby="offers-heading">
+            <Suspense fallback={<LoadingSpinner message="Loading offers..." />}>
+              <OffersList offers={offers} onSelectOffer={handleSelectOffer}/>
+            </Suspense>
+          </section>
+        )}
       </main>
       
-      <SubmissionModal
-        isOpen={modalOpen}
-        isSuccess={modalSuccess}
-        message={modalMessage}
-        selectedOffer={selectedOffer}
-        formData={formData}
-        onClose={handleCloseModal}
-      />
+      <Suspense fallback={null}>
+        <SubmissionModal
+          isOpen={modalOpen}
+          isSuccess={modalSuccess}
+          message={modalMessage}
+          selectedOffer={selectedOffer}
+          formData={formData}
+          onClose={handleCloseModal}
+        />
+      </Suspense>
     </Container>
   )
+}
+
+const styles = {
+  container: {
+    backgroundColor: '#F9FAFB',
+    minHeight: '100vh'
+  },
+  skipLink: {
+    position: 'absolute' as const,
+    top: '-40px',
+    left: '6px',
+    background: '#000',
+    color: '#fff',
+    padding: '8px',
+    textDecoration: 'none',
+    zIndex: 1000,
+    borderRadius: '4px'
+  },
+  main: {
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '0 1rem 2rem 1rem'
+  }
 }
 
 export default App
