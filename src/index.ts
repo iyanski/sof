@@ -9,6 +9,7 @@ import {
 } from './middleware/error.middleware';
 import pinoHttp from 'pino-http';
 import { logger } from './utils/logger';
+import { createGracefulShutdown, setupSignalHandlers } from './utils/shutdown';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -70,10 +71,24 @@ app.use('*', notFoundHandler);
 // Global error handling middleware (must be last)
 app.use(globalErrorHandler);
 
-app.listen(port, () => {
+// Start server and store reference for graceful shutdown
+const server = app.listen(port, () => {
   logger.info(`🚀 SOF API server listening on port ${port}`);
   logger.info(`📚 API Documentation available at http://localhost:${port}/api-docs`);
   logger.info(`🔍 Health check available at http://localhost:${port}/health`);
 });
+
+// Setup graceful shutdown
+const { gracefulShutdown } = createGracefulShutdown(server, {
+  timeout: 30000,
+  cleanup: async () => {
+    // Add any custom cleanup logic here
+    // For example: close database connections, clear caches, etc.
+    logger.info('🧹 Performing custom cleanup...');
+  }
+});
+
+// Register signal handlers
+setupSignalHandlers(gracefulShutdown);
 
 export default app;

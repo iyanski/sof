@@ -435,11 +435,28 @@ This API is **production-ready** with the following features:
 - **Testing**: 90%+ test coverage with 205 test cases
 - **Code Quality**: ESLint, Prettier, and strict TypeScript configuration
 
+### **Libraries**
+
+#### **Right Motivations to Use Pino**
+- **Scalability**: As your API grows, you'll need proper logging infrastructure
+- **Monitoring**: Structured logs integrate with monitoring tools 
+- **Debugging**: Better log levels and filtering capabilities
+- **Performance**: Handle more requests per second
+- **Production Readiness**: Industry-standard logging solution
+
+#### **Right Motivations to Use Swagger for documentation**
+- **Interactive Documentation**: Provides a user-friendly UI for API exploration
+- **API Testing**: Built-in request builder for testing endpoints
+- **Standards Compliance**: OpenAPI/Swagger spec is an industry standard
+- **Code-First Approach**: Generate docs from code annotations
+- **Developer Experience**: Reduces onboarding time for API consumers
+- **API Versioning**: Helps track and manage API changes
+- **Schema Validation**: Auto-validates requests against defined schemas
+- **Mock Servers**: Can generate mock servers from API specs
+
 ### **🔧 Optional Enhancements**
-- Environment configuration (.env support)
 - Security headers (helmet.js)
 - Rate limiting (express-rate-limit)
-- Graceful shutdown handling
 - Structured logging with correlation IDs
 
 ## 🤖 AI Assistance
