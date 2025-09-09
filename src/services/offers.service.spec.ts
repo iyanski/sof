@@ -3,6 +3,7 @@ import { OffersService } from './offers.service';
 import { EligibilityService } from './eligibility.service';
 import { carriers } from '../data/carriers';
 import { OfferRequest, Shipment } from '../types';
+import { DEFAULT_CONFIG } from './eligibility/config';
 
 describe('OffersService', () => {
   let offersService: OffersService;
@@ -39,7 +40,7 @@ describe('OffersService', () => {
       // All returned offers should be eligible
       result[0].offers.forEach(offer => {
         expect(offer.isEligible).toBe(true);
-        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(70);
+        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(DEFAULT_CONFIG.eligibilityThreshold);
       });
     });
 
@@ -401,7 +402,7 @@ describe('OffersService', () => {
       // All offers should be from eligible carriers
       offers.forEach(offer => {
         expect(offer.isEligible).toBe(true);
-        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(70);
+        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(DEFAULT_CONFIG.eligibilityThreshold);
       });
     });
   });

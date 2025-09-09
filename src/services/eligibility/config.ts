@@ -89,7 +89,7 @@ export const DEFAULT_CONFIG: ComprehensiveScoringConfiguration = {
     primary: 0.7,
     secondary: 0.3,
   },
-  eligibilityThreshold: 70,
+  eligibilityThreshold: 65,
   explainabilityLevel: 'positive-only', // Default to current behavior
   strategyThresholds: DEFAULT_STRATEGY_THRESHOLDS,
 } as const;

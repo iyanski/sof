@@ -19,6 +19,14 @@ export class OffersService {
     for (const carrier of relevantCarriers) {
       const eligibilityResult = this.eligibilityService.calculateEligibilityScore(carrier, request.shipment, costRanges);
 
+      // Debug logging
+      // console.log(`${carrier.name} eligibility details:`, {
+      //   isEligible: eligibilityResult.isEligible,
+      //   score: eligibilityResult.score,
+      //   reasons: eligibilityResult.reasons,
+      //   strategyScores: eligibilityResult.strategyScores
+      // });
+
       // Only include eligible carriers
       if (eligibilityResult.isEligible) {
         const totalWeight = this.calculateTotalWeight(request.shipment);

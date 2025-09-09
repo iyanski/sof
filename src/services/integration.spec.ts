@@ -3,6 +3,7 @@ import { OffersService } from './offers.service';
 import { EligibilityService } from './eligibility.service';
 import { carriers } from '../data/carriers';
 import { OfferRequest, Shipment } from '../types';
+import { DEFAULT_CONFIG } from './eligibility/config';
 
 describe('End-to-End Integration Tests', () => {
   let offersService: OffersService;
@@ -101,7 +102,7 @@ describe('End-to-End Integration Tests', () => {
       // Some carriers should be filtered out due to weight constraints
       result[0].offers.forEach(offer => {
         expect(offer.isEligible).toBe(true);
-        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(70);
+        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(DEFAULT_CONFIG.eligibilityThreshold);
       });
     });
 
@@ -127,7 +128,7 @@ describe('End-to-End Integration Tests', () => {
       // Only carriers with high volume limits should remain
       result[0].offers.forEach(offer => {
         expect(offer.isEligible).toBe(true);
-        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(70);
+        expect(offer.eligibilityScore).toBeGreaterThanOrEqual(DEFAULT_CONFIG.eligibilityThreshold);
       });
     });
 

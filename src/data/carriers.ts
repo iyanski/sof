@@ -6,17 +6,11 @@ export const carriers: Carrier[] = [
     name: 'DHL',
     deliveryTime: 3,
     environmentalImpact: 5,
-    costPerKg: 10, // New field: total weight * 10
+    costPerKg: 14,
     eligibilityRules: [
       {
         name: 'Maximum weight rule',
         weight: { max: 200 },
-      }, {
-        name: 'Maximum volume rule',
-        volume: { max: 270 },
-      }, {
-        name: 'Maximum dimensions rule',
-        dimensions: { maxLength: 270, maxWidth: 270, maxHeight: 270 },
       }, {
         name: 'Origin address rule',
         originAddress: { country: 'SE' },
@@ -29,7 +23,7 @@ export const carriers: Carrier[] = [
     name: 'Bring',
     deliveryTime: 2,
     environmentalImpact: 7, // Updated to match your requirements
-    costPerKg: 15, // New field: total weight * 15
+    costPerKg: 18,
     eligibilityRules: [
       {
         name: 'Weight rule',
@@ -43,7 +37,7 @@ export const carriers: Carrier[] = [
     name: 'FedEx Express',
     deliveryTime: 1,
     environmentalImpact: 10,
-    costPerKg: 33, // New field: total weight * 33
+    costPerKg: 15,
     eligibilityRules: [
       {
         name: 'Maximum weight rule',
@@ -60,14 +54,11 @@ export const carriers: Carrier[] = [
     name: 'DSV Green',
     deliveryTime: 5,
     environmentalImpact: 1,
-    costPerKg: 20, // New field: total weight * 20
+    costPerKg: 17,
     eligibilityRules: [
       {
         name: 'Maximum weight rule',
         weight: { max: 100 },
-      }, {
-        name: 'Maximum volume rule',
-        volume: { max: 2000 },
       }, {
         name: 'Destination address rule',
         destinationAddress: { country: 'SE' },

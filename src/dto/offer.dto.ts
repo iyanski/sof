@@ -1,4 +1,5 @@
-import { IsString, IsNumber, IsBoolean, IsArray, Min, Max } from 'class-validator';
+import { IsString, IsNumber, IsBoolean, IsArray, Min, Max, IsObject, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 import { ShipmentDto } from './shipment.dto';
 
 /**
@@ -102,7 +103,10 @@ export class OfferDto {
  *           $ref: '#/components/schemas/Shipment'
  */
 export class OfferRequestDto {
-  shipment: ShipmentDto;
+  @IsObject()
+  @ValidateNested()
+  @Type(() => ShipmentDto)
+    shipment: ShipmentDto;
 }
 
 /**
