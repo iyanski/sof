@@ -1,69 +1,51 @@
-import { useState } from 'react'
-import { Container, Header, Content, Panel, Button, ButtonGroup, Divider } from 'rsuite'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Container, Content } from 'rsuite'
+import { Header, HeroSection, ShipmentForm, SubmissionModal, useShipmentForm } from './components'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {
+    formData,
+    isLoading,
+    formRef,
+    modalOpen,
+    modalSuccess,
+    modalMessage,
+    handleFormChange,
+    handleSubmit,
+    handleReset,
+    handleCloseModal
+  } = useShipmentForm()
+
+  const handleScrollToForm = () => {
+    document.getElementById('shipment-form')?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
-    <Container>
-      <Header>
-        <Panel>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem' }}>
-            <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
-              <img src={viteLogo} className="logo" alt="Vite logo" />
-            </a>
-            <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-              <img src={reactLogo} className="logo react" alt="React logo" />
-            </a>
-          </div>
-        </Panel>
-      </Header>
+    <Container style={{ backgroundColor: '#F9FAFB', minHeight: '100vh' }}>
+      <Header 
+        title="Shipments & Offer Explorer"
+        subtitle="Compare carriers. Find the best value. Ship smarter."
+      />
       
-      <Content>
-        <Panel header="SOF - Shipment Offers & Logistics" bordered>
-          <h2>Welcome to SOF API Frontend</h2>
-          <p>This is a React application built with Vite and RSuite components.</p>
-          
-          <Divider />
-          
-          <Panel header="Interactive Demo" bordered>
-            <p>Click the buttons below to test the counter functionality:</p>
-            <ButtonGroup>
-              <Button 
-                appearance="primary" 
-                color="blue"
-                onClick={() => setCount((count) => count + 1)}
-              >
-                Increment
-              </Button>
-              <Button 
-                appearance="subtle" 
-                color="red"
-                onClick={() => setCount(0)}
-              >
-                Reset
-              </Button>
-            </ButtonGroup>
-            <p style={{ marginTop: '1rem', fontSize: '1.2rem', fontWeight: 'bold' }}>
-              Count: {count}
-            </p>
-          </Panel>
-          
-          <Divider />
-          
-          <Panel header="Development Info" bordered>
-            <p>
-              Edit <code>src/App.tsx</code> and save to test Hot Module Replacement (HMR)
-            </p>
-            <p>
-              This app uses RSuite components for a professional UI/UX out of the box.
-            </p>
-          </Panel>
-        </Panel>
+      <Content style={{ maxWidth: '800px', margin: '0 auto', padding: '0 1rem 2rem 1rem' }}>
+        <HeroSection onScrollToForm={handleScrollToForm} />
+
+        <ShipmentForm
+          formData={formData}
+          isLoading={isLoading}
+          formRef={formRef}
+          onFormChange={handleFormChange}
+          onSubmit={handleSubmit}
+          onReset={handleReset}
+        />
       </Content>
+      
+      <SubmissionModal
+        isOpen={modalOpen}
+        isSuccess={modalSuccess}
+        message={modalMessage}
+        onClose={handleCloseModal}
+      />
     </Container>
   )
 }

@@ -70,7 +70,7 @@ Core scripts (check `package.json`):
 2. **Type safety.** Prefer TypeScript with strict mode enabled.
 3. **Accessibility.** All UI components must meet basic a11y standards (labels, roles, ARIA).
 4. **Performance.** Favor code-splitting, lazy loading, and memoization where useful.
-5. **Styling.** Respect chosen stack (Tailwind, CSS Modules, etc.).
+5. **Styling.** Respect chosen stack (Rsuite, CSS Modules, etc.).
 6. **Testing.** Every new feature requires Vitest + Testing Library coverage.
 7. **Lint/format.** ESLint + Prettier must pass before merge.
 8. **Docs.** Update README/CLAUDE.md when contracts, env vars, or conventions change.
@@ -192,7 +192,7 @@ When requesting AI changes:
 ```
 Goal: Add a login form component with email + password.
 Framework: React with TypeScript.
-Constraints: form validated with zod; use Tailwind classes.
+Constraints: form validated with zod; use Rsuite for components.
 Files: src/components/LoginForm.tsx (new), tests/LoginForm.test.tsx (new).
 Tests: must cover valid + invalid inputs.
 ```
