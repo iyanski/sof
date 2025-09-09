@@ -80,17 +80,14 @@ export interface ApiError {
   status?: number
 }
 
-export interface OfferResponse {
-  offers: Array<{
-    carrierId: string
-    carrierName: string
-    cost: number
-    deliveryTime: number
-    eligibilityScore: number
-    costEfficiencyScore: number
-    serviceQualityScore: number
-    reasons: string[]
-    isEligible: boolean
-  }>
-  generatedAt: Date
+export interface Offer {
+  carrierId: string
+  carrierName: string
+  cost: number
+  deliveryTime: number
+  eligibilityScore: number
+  costEfficiencyScore: number
+  serviceQualityScore: number
+  reasons: string[]
+  isEligible: boolean
 }

@@ -26,7 +26,8 @@ export const ShipmentForm: React.FC<ShipmentFormProps> = ({
       style={{ 
         backgroundColor: 'white',
         borderRadius: '8px',
-        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+        marginBottom: '2rem'
       }}
     >
       <Form 

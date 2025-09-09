@@ -1,17 +1,18 @@
 import { useState, useRef, useEffect } from 'react'
 import type { FormInstance } from 'rsuite'
-import type { ShipmentFormData } from '../components/types'
+import type { ShipmentFormData, Offer } from '../components/types'
 import { DEFAULT_FORM_DATA } from '../data/constants'
 import { transformFormDataToShipmentRequest } from '../utils/transformers'
 import { useOffers } from './useOffers'
 
 export const useShipmentForm = () => {
-  const { postOffers, isLoading, error: responseError } = useOffers()
+  const { postOffers, isLoading } = useOffers()
   const [formData, setFormData] = useState<ShipmentFormData>(DEFAULT_FORM_DATA)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [modalOpen, setModalOpen] = useState(false)
   const [modalSuccess, setModalSuccess] = useState(false)
   const [modalMessage, setModalMessage] = useState('')
+  const [offers, setOffers] = useState<Offer[]>([])
   const formRef = useRef<FormInstance>(null)
 
   const handleFormChange = (formValue: Record<string, unknown>) => {
@@ -21,8 +22,8 @@ export const useShipmentForm = () => {
   }
 
   useEffect(() => {
-    console.log(responseError)
-  }, [responseError])
+    console.log('Offers:', offers)
+  }, [offers])
 
   const handleSubmit = async () => {
     if (!formRef.current) return
@@ -32,20 +33,11 @@ export const useShipmentForm = () => {
       return
     }
 
-    // Simulate API call
     try {
-      // await new Promise(resolve => setTimeout(resolve, 2000))
-      // TODO: Navigate to offers page or call actual API
-
       const shipmentRequest = transformFormDataToShipmentRequest(formData)
-      console.log('Shipment request:', shipmentRequest)
-      const offers = await postOffers(shipmentRequest)
-      console.log('Offers:', offers)
+      const offersResponse: Offer[] = await postOffers(shipmentRequest)
 
-      // Show success modal
-      setModalSuccess(true)
-      setModalMessage('Your shipment request has been submitted successfully! We will process your request and get back to you with offers shortly.')
-      setModalOpen(true)
+      setOffers(offersResponse || [])
     } catch (error) {
       // Show error modal
       console.error('Error submitting shipment request:', error)
@@ -68,6 +60,7 @@ export const useShipmentForm = () => {
     formData,
     errors,
     isLoading,
+    offers,
     formRef,
     modalOpen,
     modalSuccess,

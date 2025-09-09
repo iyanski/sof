@@ -1,11 +1,11 @@
 import { useState } from "react"
-import type { ShipmentRequest, OfferResponse, ApiError } from "../components/types"
+import type { ShipmentRequest, Offer, ApiError } from "../components/types"
 
 export const useOffers = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<ApiError | null>(null)
 
-  const postOffers = async (shipmentRequest: ShipmentRequest): Promise<OfferResponse> => {
+  const postOffers = async (shipmentRequest: ShipmentRequest): Promise<Offer[]> => {
 		setIsLoading(true)
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/offers`, {
       method: 'POST',
@@ -22,7 +22,7 @@ export const useOffers = () => {
 		setError(null)
     setIsLoading(false)
 
-    return response.json() as Promise<OfferResponse>
+    return response.json() as Promise<Offer[]>
   }
 
   return { postOffers, isLoading, error }

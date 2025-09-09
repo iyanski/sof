@@ -1,5 +1,12 @@
 import { Container, Content } from 'rsuite'
-import { Header, HeroSection, ShipmentForm, SubmissionModal, useShipmentForm } from './components'
+import {
+  Header,
+  HeroSection,
+  ShipmentForm,
+  SubmissionModal,
+  OffersList,
+  useShipmentForm,
+} from './components'
 import './App.css'
 
 function App() {
@@ -10,15 +17,18 @@ function App() {
     modalOpen,
     modalSuccess,
     modalMessage,
+    offers,
     handleFormChange,
     handleSubmit,
     handleReset,
-    handleCloseModal
+    handleCloseModal,
   } = useShipmentForm()
 
   const handleScrollToForm = () => {
     document.getElementById('shipment-form')?.scrollIntoView({ behavior: 'smooth' })
   }
+
+  console.log('Offers:', offers)
 
   return (
     <Container style={{ backgroundColor: '#F9FAFB', minHeight: '100vh' }}>
@@ -38,6 +48,8 @@ function App() {
           onSubmit={handleSubmit}
           onReset={handleReset}
         />
+
+        <OffersList offers={offers}/>
       </Content>
       
       <SubmissionModal
