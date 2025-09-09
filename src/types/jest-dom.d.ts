@@ -1,5 +1,6 @@
 // Jest DOM matchers type definitions
 import '@testing-library/jest-dom'
+import 'jest-axe/extend-expect'
 
 declare global {
   namespace jest {
@@ -14,6 +15,7 @@ declare global {
       toHaveTextContent(text: string | RegExp): R
       toBeVisible(): R
       toBeHidden(): R
+      toHaveNoViolations(): R
     }
   }
 }

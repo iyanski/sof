@@ -16,9 +16,14 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
       onClose={onClose}
       size={isSuccess ? "md" : "sm"}
       backdrop="static"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+      role="dialog"
     >
       <Modal.Header>
-        <Modal.Title/>
+        <Modal.Title id="modal-title">
+          {isSuccess ? 'Shipment Confirmation' : 'Error'}
+        </Modal.Title>
       </Modal.Header>
       
       <Modal.Body>
@@ -31,7 +36,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
               gap: '1rem',
               marginBottom: '1.5rem'
             }}>
-              
+              <div style={{ fontSize: '2rem' }} aria-hidden="true">✅</div>
               <div>
                 <Heading level={3}>
                   Confirmation
@@ -46,7 +51,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
             <Card style={{ marginBottom: '1rem' }}>
               <Card.Header>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ fontSize: '1.2rem' }}>📦</span>
+                  <span style={{ fontSize: '1.2rem' }} aria-hidden="true">📦</span>
                   <strong>Shipment Details</strong>
                 </div>
               </Card.Header>
@@ -76,7 +81,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
             <Card>
               <Card.Header>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ fontSize: '1.2rem' }}>🚚</span>
+                  <span style={{ fontSize: '1.2rem' }} aria-hidden="true">🚚</span>
                   <strong>Selected Carrier</strong>
                 </div>
               </Card.Header>
@@ -113,18 +118,22 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
             gap: '1rem',
             padding: '1rem 0'
           }}>
-            <Close style={{ fontSize: '2rem', color: '#EF4444', marginTop: '0.25rem' }} />
+            <Close style={{ fontSize: '2rem', color: '#EF4444', marginTop: '0.25rem' }} aria-hidden="true" />
             <div style={{ flex: 1 }}>
-              <pre style={{ 
-                margin: 0, 
-                fontSize: '0.9rem', 
-                lineHeight: '1.5',
-                fontFamily: 'inherit',
-                whiteSpace: 'pre-wrap',
-                wordWrap: 'break-word'
-              }}>
+              <div 
+                style={{ 
+                  margin: 0, 
+                  fontSize: '0.9rem', 
+                  lineHeight: '1.5',
+                  fontFamily: 'inherit',
+                  whiteSpace: 'pre-wrap',
+                  wordWrap: 'break-word'
+                }}
+                role="alert"
+                aria-live="polite"
+              >
                 {message}
-              </pre>
+              </div>
             </div>
           </div>
         )}
@@ -135,6 +144,7 @@ export const SubmissionModal: React.FC<SubmissionModalProps> = ({
           appearance="primary" 
           onClick={onClose}
           style={{ backgroundColor: isSuccess ? '#10B981' : '#EF4444' }}
+          aria-label={isSuccess ? 'Continue with shipment' : 'Try again'}
         >
           {isSuccess ? 'Continue' : 'Try Again'}
         </Button>

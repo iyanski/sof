@@ -56,12 +56,20 @@ export const OffersList: React.FC<OffersListProps> = ({
 
   return (
     <Content>
-      <Heading level={4}>
+      <Heading 
+        level={4}
+        id="offers-heading"
+        style={{ marginBottom: '1.5rem' }}
+      >
         Available Offers
       </Heading>
       
       {offers?.length > 0 ? (
-        <div>
+        <div 
+          role="region"
+          aria-labelledby="offers-heading"
+          aria-live="polite"
+        >
           {offers.map((offer: Offer) => (
             <OfferCard
               key={offer.carrierId}
@@ -74,11 +82,15 @@ export const OffersList: React.FC<OffersListProps> = ({
           ))}
         </div>
       ) : (
-        <div style={{
-          textAlign: 'center',
-          padding: '48px 24px',
-          color: '#6B7280'
-        }}>
+        <div 
+          style={{
+            textAlign: 'center',
+            padding: '48px 24px',
+            color: '#6B7280'
+          }}
+          role="status"
+          aria-live="polite"
+        >
           <p style={{ fontSize: '18px', marginBottom: '8px' }}>
             No offers available
           </p>

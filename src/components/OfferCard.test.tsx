@@ -47,7 +47,7 @@ describe('OfferCard Component', () => {
       
       // When
       render(<OfferCard offer={offer} onSelect={mockOnSelect} />)
-      const selectButton = screen.getByRole('button', { name: /select carrier/i })
+      const selectButton = screen.getByRole('button', { name: /select.*carrier/i })
       
       // Then
       expect(selectButton).not.toBeDisabled()
@@ -60,7 +60,7 @@ describe('OfferCard Component', () => {
       
       // When
       render(<OfferCard offer={offer} onSelect={mockOnSelect} />)
-      const selectButton = screen.getByRole('button', { name: /select carrier/i })
+      const selectButton = screen.getByRole('button', { name: /select.*carrier/i })
       fireEvent.click(selectButton)
       
       // Then
@@ -93,7 +93,7 @@ describe('OfferCard Component', () => {
       
       // When
       render(<OfferCard offer={offer} onSelect={mockOnSelect} />)
-      const selectButton = screen.getByRole('button', { name: /select carrier/i })
+      const selectButton = screen.getByRole('button', { name: /select.*carrier/i })
       
       // Then
       expect(selectButton).toBeDisabled()
@@ -229,7 +229,7 @@ describe('OfferCard Component', () => {
       
       // When
       render(<OfferCard offer={offer} onSelect={mockOnSelect} />)
-      const selectButton = screen.getByRole('button', { name: /select carrier/i })
+      const selectButton = screen.getByRole('button', { name: /select.*carrier/i })
       
       // Then
       expect(selectButton).toBeInTheDocument()
@@ -242,7 +242,7 @@ describe('OfferCard Component', () => {
       
       // When
       render(<OfferCard offer={offer} onSelect={mockOnSelect} />)
-      const selectButton = screen.getByRole('button', { name: /select carrier/i })
+      const selectButton = screen.getByRole('button', { name: /select.*carrier/i })
       selectButton.focus()
       
       // Then

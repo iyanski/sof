@@ -1,5 +1,6 @@
 // Jest setup file for testing environment
 import '@testing-library/jest-dom'
+import 'jest-axe/extend-expect'
 
 // Mock environment variables
 process.env.VITE_API_URL = 'http://localhost:3000'

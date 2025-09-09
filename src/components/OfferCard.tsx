@@ -109,6 +109,9 @@ export const OfferCard: React.FC<OfferCardProps> = ({
         marginBottom: '16px',
         opacity: offer.isEligible ? 1 : 0.6
       }}
+      role="article"
+      aria-labelledby={`offer-${offer.carrierId}-title`}
+      aria-describedby={`offer-${offer.carrierId}-description`}
     >
       <Card.Body style={{ padding: '16px' }}>
         {/* Header with carrier info and badges */}
@@ -119,20 +122,27 @@ export const OfferCard: React.FC<OfferCardProps> = ({
           marginBottom: '16px'
         }}>
           <div>
-            <h3 style={{ 
-              margin: 0, 
-              fontSize: '18px', 
-              fontWeight: 'bold',
-              color: '#111827'
-            }}>
+            <h3 
+              id={`offer-${offer.carrierId}-title`}
+              style={{ 
+                margin: 0, 
+                fontSize: '18px', 
+                fontWeight: 'bold',
+                color: '#111827'
+              }}
+            >
               {offer.carrierName}
             </h3>
-            <div style={{ 
-              display: 'flex', 
-              gap: '8px', 
-              marginTop: '8px',
-              flexWrap: 'wrap'
-            }}>
+            <div 
+              style={{ 
+                display: 'flex', 
+                gap: '8px', 
+                marginTop: '8px',
+                flexWrap: 'wrap'
+              }}
+              role="group"
+              aria-label="Offer badges"
+            >
               {isBestValue && <Badge variant="primary">Best Value</Badge>}
               {isFastest && <Badge variant="secondary">Fastest</Badge>}
               {isCheapest && <Badge variant="success">Cheapest</Badge>}
@@ -145,28 +155,46 @@ export const OfferCard: React.FC<OfferCardProps> = ({
             trigger="hover"
             speaker={<Tooltip>{getScoreTooltip()}</Tooltip>}
           >
-            <div>
+            <div 
+              role="button"
+              tabIndex={0}
+              aria-label={`Overall score: ${getTotalScore()} out of 100. Hover for detailed breakdown.`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  // Could trigger tooltip programmatically here
+                }
+              }}
+            >
               <Pill score={getTotalScore()} />
             </div>
           </Whisper>
         </div>
 
         {/* Price and delivery info */}
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px',
-          padding: '12px',
-          backgroundColor: '#F9FAFB',
-          borderRadius: '6px'
-        }}>
+        <div 
+          id={`offer-${offer.carrierId}-description`}
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px',
+            padding: '12px',
+            backgroundColor: '#F9FAFB',
+            borderRadius: '6px'
+          }}
+          role="group"
+          aria-label="Offer details"
+        >
           <div>
-            <div style={{ 
-              fontSize: '24px', 
-              fontWeight: 'bold',
-              color: '#111827'
-            }}>
+            <div 
+              style={{ 
+                fontSize: '24px', 
+                fontWeight: 'bold',
+                color: '#111827'
+              }}
+              aria-label={`Total cost: ${formatPrice(offer.cost)}`}
+            >
               {formatPrice(offer.cost)}
             </div>
             <div style={{ 
@@ -178,11 +206,14 @@ export const OfferCard: React.FC<OfferCardProps> = ({
           </div>
           
           <div style={{ textAlign: 'right' }}>
-            <div style={{ 
-              fontSize: '18px', 
-              fontWeight: '600',
-              color: '#111827'
-            }}>
+            <div 
+              style={{ 
+                fontSize: '18px', 
+                fontWeight: '600',
+                color: '#111827'
+              }}
+              aria-label={`Delivery time: ${formatDeliveryTime(offer.deliveryTime)}`}
+            >
               {formatDeliveryTime(offer.deliveryTime)}
             </div>
             <div style={{ 
@@ -196,13 +227,17 @@ export const OfferCard: React.FC<OfferCardProps> = ({
 
         {/* Eligibility status */}
         {!offer.isEligible && offer.reasons.length > 0 && (
-          <div style={{ 
-            marginBottom: '16px',
-            padding: '8px 12px',
-            backgroundColor: '#FEF2F2',
-            border: '1px solid #FECACA',
-            borderRadius: '6px'
-          }}>
+          <div 
+            style={{ 
+              marginBottom: '16px',
+              padding: '8px 12px',
+              backgroundColor: '#FEF2F2',
+              border: '1px solid #FECACA',
+              borderRadius: '6px'
+            }}
+            role="alert"
+            aria-live="polite"
+          >
             <div style={{ 
               fontSize: '14px', 
               color: '#DC2626',
@@ -224,13 +259,18 @@ export const OfferCard: React.FC<OfferCardProps> = ({
         )}
 
         {/* Action buttons */}
-        <ButtonToolbar style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <ButtonToolbar 
+          style={{ display: 'flex', justifyContent: 'flex-end' }}
+          role="group"
+          aria-label="Offer actions"
+        >
           <Button
             appearance="primary"
             size="lg"
             onClick={() => onSelect(offer)}
             disabled={!offer.isEligible}
-            // style={{ minHeight: '44px' }}
+            aria-label={`Select ${offer.carrierName} carrier for ${formatPrice(offer.cost)}`}
+            aria-describedby={!offer.isEligible ? `eligibility-${offer.carrierId}` : undefined}
           >
             Select Carrier
           </Button>
