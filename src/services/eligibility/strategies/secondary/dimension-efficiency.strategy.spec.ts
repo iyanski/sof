@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach } from '@jest/globals';
 import { DimensionEfficiencyStrategy } from './dimension-efficiency.strategy';
 import { ScoringContext, ShipmentMetrics } from '../../interfaces';
-import { Carrier, Shipment } from '../../../../types';
+import { Carrier } from '../../../../types/carrier';
+import { Shipment } from '../../../../types/shipment';
 
 describe('DimensionEfficiencyStrategy', () => {
   let strategy: DimensionEfficiencyStrategy;

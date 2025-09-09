@@ -2,7 +2,8 @@ import { describe, it, expect, beforeEach } from '@jest/globals';
 import { OffersService } from './offers.service';
 import { EligibilityService } from './eligibility.service';
 import { carriers } from '../data/carriers';
-import { OfferRequest, Shipment } from '../types';
+import { OfferRequest } from '../types/offer-request';
+import { Shipment } from '../types/shipment';
 import { DEFAULT_CONFIG } from './eligibility/config';
 
 describe('End-to-End Integration Tests', () => {

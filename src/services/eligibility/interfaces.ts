@@ -1,4 +1,5 @@
-import { Carrier, Shipment } from "../../types";
+import { Carrier } from "../../types/carrier";
+import { Shipment } from "../../types/shipment";
 
 // ===========================
 // CORE INTERFACES & TYPES

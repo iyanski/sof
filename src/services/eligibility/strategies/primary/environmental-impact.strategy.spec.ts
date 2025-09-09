@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach } from '@jest/globals';
 import { EnvironmentalImpactStrategy } from './environmental-impact.strategy';
 import { ScoringContext, ShipmentMetrics } from '../../interfaces';
-import { Carrier, Shipment } from '../../../../types';
+import { Carrier } from '../../../../types/carrier';
+import { Shipment } from '../../../../types/shipment';
 
 describe('EnvironmentalImpactStrategy', () => {
   let strategy: EnvironmentalImpactStrategy;

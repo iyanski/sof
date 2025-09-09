@@ -1,4 +1,5 @@
-import { Carrier, EligibilityRule } from "../../types";
+import { Carrier } from "../../types/carrier";
+import { EligibilityRule } from "../../types/eligibility-rule";
 import { ScoringContext, RuleEvaluationResult } from "./interfaces";
 
 // ===========================

@@ -1,7 +1,7 @@
 import { describe, it, expect } from '@jest/globals';
 import { EligibilityService } from './eligibility.service';
 import { carriers } from '../data/carriers';
-import { Shipment } from '../types';
+import { Shipment } from '../types/shipment';
 import { DEFAULT_CONFIG } from './eligibility/config';
 
 describe('Eligibility Service', () => {

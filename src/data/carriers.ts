@@ -1,4 +1,4 @@
-import { Carrier } from "../types";
+import { Carrier } from "../types/carrier";
 
 export const carriers: Carrier[] = [
   {

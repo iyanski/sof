@@ -1,7 +1,8 @@
 import { describe, it, expect } from '@jest/globals';
 import { DeliverySpeedStrategy } from './delivery-speed.strategy';
 import { ScoringContext, ShipmentMetrics } from '../../interfaces';
-import { Carrier, Shipment } from '../../../../types';
+import { Carrier } from '../../../../types/carrier';
+import { Shipment } from '../../../../types/shipment';
 
 describe('DeliverySpeedStrategy', () => {
   let strategy: DeliverySpeedStrategy;

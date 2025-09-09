@@ -4,6 +4,7 @@ import cors from 'cors';
 import { setupSwagger } from './config/swagger';
 import offersRouter from './routes/offers';
 import { globalErrorHandler, notFoundHandler, requestLogger } from './middleware/error.middleware';
+import pinoHttp from 'pino-http';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,6 +13,8 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(pinoHttp());
 
 // Request logging middleware
 app.use(requestLogger);

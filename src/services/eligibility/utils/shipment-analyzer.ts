@@ -1,4 +1,4 @@
-import { Shipment } from "../../../types";
+import { Shipment } from "../../../types/shipment";
 import { ShipmentMetrics } from "../interfaces";
 
 // ===========================

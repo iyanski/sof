@@ -1,4 +1,6 @@
-import { Carrier, Shipment, EligibilityResult } from "../../types";
+import { Carrier } from "../../types/carrier";
+import { Shipment } from "../../types/shipment";
+import { EligibilityResult } from "../../types/eligibility-result";
 import { ScoringContext, RuleEvaluationResult, ShipmentMetrics } from "./interfaces";
 import { DEFAULT_CONFIG, ComprehensiveScoringConfiguration } from "./config";
 import { ShipmentAnalyzer } from "./utils/shipment-analyzer";

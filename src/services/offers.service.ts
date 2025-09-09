@@ -1,5 +1,10 @@
 import { carriers } from "../data/carriers";
-import { Carrier, Offer, OfferRequest, OfferResponse, Package, Shipment } from "../types";
+import { Carrier } from "../types/carrier";
+import { Offer } from "../types/offer";
+import { OfferRequest } from "../types/offer-request";
+import { OfferResponse } from "../types/offer-response";
+import { Package } from "../types/package";
+import { Shipment } from "../types/shipment";
 import { EligibilityService } from "./eligibility.service";
 import { DEFAULT_STRATEGY_THRESHOLDS } from "./eligibility/config";
 
