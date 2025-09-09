@@ -12,12 +12,12 @@ This root file serves as a **pointer** so that AI-assisted editors (Claude, Chat
 ## General Guidance
 
 * Always consult the **specific CLAUDE.md** inside the relevant subdirectory (`api/` or `app/`).
-* If you’re working on **infrastructure or repo-wide tasks** (e.g., CI, linting across projects, dependency management, Git/PR conventions), apply the stricter of the two guidelines where they overlap.
+* If you're working on **infrastructure or repo-wide tasks** (e.g., CI, linting across projects, dependency management, Git/PR conventions), apply the stricter of the two guidelines where they overlap.
 * When in doubt, **default to backend rules for security and validation** and **frontend rules for UX and accessibility**.
 
 ## Safe AI Development Prompt (Repo-Wide)
 
-Use this prompt when unsure which project you’re working on:
+Use this prompt when unsure which project you're working on:
 
 > "Please make the requested changes to this monorepo. If the change concerns the API, follow `api/CLAUDE.md` (Express.js + TypeScript conventions, DTO validation, error handling, tests, Swagger). If the change concerns the App, follow `app/CLAUDE.md` (Vite app conventions, component patterns, TypeScript/React/Vue rules, testing with Vitest). For repo-wide changes (CI, lint, tooling), respect both guidelines and maintain consistency."
 
