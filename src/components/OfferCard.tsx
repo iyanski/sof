@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, Tooltip, Whisper } from 'rsuite'
+import { Card, Button, Tooltip, Whisper, Rate } from 'rsuite'
 import type { Offer } from './types'
 import { Badge } from './Badge'
 import { Pill } from './Pill'
@@ -22,9 +22,9 @@ export const OfferCard: React.FC<OfferCardProps> = ({
   isCheapest = false
 }) => {
   const formatPrice = (cost: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('sv-SE', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'SEK',
       minimumFractionDigits: 2
     }).format(cost)
   }
@@ -41,13 +41,63 @@ export const OfferCard: React.FC<OfferCardProps> = ({
   }
 
   const getScoreTooltip = () => {
+    const convertToRating = (score: number) => {
+      // Convert 0-100 score to 0-5 rating scale
+      return Math.round((score / 100) * 5 * 10) / 10 // Round to 1 decimal place
+    }
+
     return (
-      <div style={{ padding: '8px' }}>
-        <div><strong>Eligibility:</strong> {offer.eligibilityScore}/100</div>
-        <div><strong>Cost Efficiency:</strong> {offer.costEfficiencyScore}/100</div>
-        <div><strong>Service Quality:</strong> {offer.serviceQualityScore}/100</div>
-        <div style={{ marginTop: '4px', borderTop: '1px solid #e5e7eb', paddingTop: '4px' }}>
-          <strong>Total:</strong> {getTotalScore()}/100
+      <div style={{ padding: '12px', minWidth: '200px' }}>
+        <div style={{ marginBottom: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+            <strong>Eligibility:</strong>
+            <span>{offer.eligibilityScore}/100</span>
+          </div>
+          <Rate 
+            value={convertToRating(offer.eligibilityScore)} 
+            size="xs" 
+            readOnly 
+            style={{ marginLeft: '8px' }}
+          />
+        </div>
+        
+        <div style={{ marginBottom: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+            <strong>Cost Efficiency:</strong>
+            <span>{offer.costEfficiencyScore}/100</span>
+          </div>
+          <Rate 
+            value={convertToRating(offer.costEfficiencyScore)} 
+            size="xs" 
+            readOnly 
+            style={{ marginLeft: '8px' }}
+          />
+        </div>
+        
+        <div style={{ marginBottom: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+            <strong>Service Quality:</strong>
+            <span>{offer.serviceQualityScore}/100</span>
+          </div>
+          <Rate 
+            value={convertToRating(offer.serviceQualityScore)} 
+            size="xs" 
+            readOnly 
+            style={{ marginLeft: '8px' }}
+          />
+        </div>
+        
+        <div style={{ marginTop: '8px', borderTop: '1px solid #e5e7eb', paddingTop: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+            <strong>Total Score:</strong>
+            <span>{getTotalScore()}/100</span>
+          </div>
+          <Rate 
+            value={convertToRating(getTotalScore())} 
+            size="xs" 
+            readOnly 
+            style={{ marginLeft: '8px' }}
+          />
         </div>
       </div>
     )

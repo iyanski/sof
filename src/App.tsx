@@ -22,6 +22,7 @@ function App() {
     handleSubmit,
     handleReset,
     handleCloseModal,
+    handleSelectOffer,
   } = useShipmentForm()
 
   const handleScrollToForm = () => {
@@ -49,7 +50,7 @@ function App() {
           onReset={handleReset}
         />
 
-        <OffersList offers={offers}/>
+        <OffersList offers={offers} onSelectOffer={handleSelectOffer}/>
       </Content>
       
       <SubmissionModal

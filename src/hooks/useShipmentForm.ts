@@ -13,6 +13,7 @@ export const useShipmentForm = () => {
   const [modalSuccess, setModalSuccess] = useState(false)
   const [modalMessage, setModalMessage] = useState('')
   const [offers, setOffers] = useState<Offer[]>([])
+  const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null)
   const formRef = useRef<FormInstance>(null)
 
   const handleFormChange = (formValue: Record<string, unknown>) => {
@@ -54,6 +55,49 @@ export const useShipmentForm = () => {
 
   const handleCloseModal = () => {
     setModalOpen(false)
+    setSelectedOffer(null)
+  }
+
+  const handleSelectOffer = (offer: Offer) => {
+    setSelectedOffer(offer)
+    
+    // Create detailed confirmation message
+    const formatPrice = (cost: number) => {
+      return new Intl.NumberFormat('sv-SE', {
+        style: 'currency',
+        currency: 'SEK',
+        minimumFractionDigits: 2
+      }).format(cost)
+    }
+
+    const formatDeliveryTime = (days: number) => {
+      if (days === 1) return '1 day'
+      return `${days} days`
+    }
+
+    const totalWeight = formData.weight * formData.quantity
+    const totalVolume = formData.length * formData.width * formData.height * formData.quantity // Volume in cm³
+
+    const confirmationMessage = `
+      Offer Selected Successfully!
+      
+      📦 Shipment Details:
+      • Route: ${formData.originCountry} → ${formData.destinationCountry}
+      • Weight: ${totalWeight} kg
+      • Volume: ${totalVolume.toLocaleString()} cm³
+      • Quantity: ${formData.quantity} package(s)
+      
+      🚚 Selected Carrier: ${offer.carrierName}
+      • Cost: ${formatPrice(offer.cost)}
+      • Delivery Time: ${formatDeliveryTime(offer.deliveryTime)}
+      • Eligibility Score: ${offer.eligibilityScore}/100
+      
+      Your shipment has been confirmed with ${offer.carrierName}.
+    `.trim()
+
+    setModalSuccess(true)
+    setModalMessage(confirmationMessage)
+    setModalOpen(true)
   }
 
   return {
@@ -61,6 +105,7 @@ export const useShipmentForm = () => {
     errors,
     isLoading,
     offers,
+    selectedOffer,
     formRef,
     modalOpen,
     modalSuccess,
@@ -68,6 +113,7 @@ export const useShipmentForm = () => {
     handleFormChange,
     handleSubmit,
     handleReset,
-    handleCloseModal
+    handleCloseModal,
+    handleSelectOffer
   }
 }
